@@ -1,5 +1,5 @@
 .DS_Store
 .Rproj.user
-.results/figures/*
-.results/output/*
-.results/tables/*
+results/figures/*.png
+results/output/*.txt
+results/tables/*.txt
