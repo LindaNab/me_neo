@@ -3,7 +3,7 @@
 ## measurement error correction
 ##
 ## 1 - Data Generation ----
-## lindanab4@gmail.com - Feb 2020
+## lindanab4@gmail.com - 20200221
 #############################################################
 
 ##############################
@@ -58,20 +58,3 @@ gen_data <- function(nobs = 650,
                                        sd = sigma))
   return(out_df)
 }
-# by increasing tau, we add more measurement error
-# var_VAT = 2075, approximately the variance of VAT (estimated by generating a
-# data set of size 1e7)
-calc_tau <- function(R_squared, theta = 0.16, var_VAT = 2075){
-  tau_squared <- ((1 - R_squared) * theta^2 * var_VAT) / R_squared
-  return(sqrt(tau_squared))
-}
-# by changing lambda, we change the skewness of the data
-calc_lambda <- function(skewness, k = 6.1){
-  lambda <- 4 / (k * skewness^2)
-  return(lambda)
-}
-
-tau <- calc_tau(0.2)
-data <- gen_data(nobs = 1e6, lambda = 1, tau = tau, heteroscedastic = F)
-summary(with (data, lm(WC ~ VAT)))
-
