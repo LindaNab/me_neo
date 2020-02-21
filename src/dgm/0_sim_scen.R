@@ -29,17 +29,24 @@ calc_lambda <- function(skewness, k = 6.1){
 ############################## 
 # 2 - Functions that creates data.frame with 200 scenarios
 ##############################
-skewness <- c(0.1, 1, 2, 4, 6)
-R_squared <- c(0.2, 0.4, 0.6, 0.8, 0.9)
-heteroscedastic <- c(TRUE, FALSE)
-intvaldata <- c(0.10, 0.25, 0.40, 0.50)
 scenarios <- function(){
-  scenarios <- expand.grid(skewness, 
-  R_squared, 
-  heteroscedastic, 
-  intvaldata)
-  colnames(scenarios) <- c("skewness", 
-                           "R_squared", 
+  skewness <- c(0.1, 1, 2, 4, 6)
+  lambdas <- sapply(skewness, calc_lambda)
+  R_squared <- c(0.2, 0.4, 0.6, 0.8, 0.9)
+  taus <- sapply(R_squared, calc_tau)
+  heteroscedastic <- c(TRUE, FALSE)
+  size_valdata <- c(0.10, 0.25, 0.40, 0.50)
+  sampling_strat <- c("Random", "Uniform", "Extremes")
+  
+  # data.frame with simulation scenarios
+  scenarios <- expand.grid(lambdas, 
+                           taus, 
+                           heteroscedastic, 
+                           intvaldata, 
+                           sampling_strat)
+  colnames(scenarios) <- c("lambda", 
+                           "tau", 
                            "heteroscedastic", 
-                           "intvaldata")
+                           "size_valdata", 
+                           "sampling_strat")
   return(scenarios)}
