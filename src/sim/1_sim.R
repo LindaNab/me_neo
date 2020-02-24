@@ -21,6 +21,11 @@ simulation <- function(S = 5000,
     data <- gen_data(lambda = scenarios()[126, 'lambda'],
                      tau = scenarios()[126, 'tau'],
                      heteroscedastic = scenarios()[126, 'heteroscedastic'])
-    
+    for(sampling_strat in c("Random", "Uniform", "Extremes")){
+      data <- select_valdata(data,
+                     use_variable = "WC", 
+                     size_valdata = scenarios()[126, 'size_valdata'],
+                     sampling_strat = sampling_strat)
+    }
   }
 }
