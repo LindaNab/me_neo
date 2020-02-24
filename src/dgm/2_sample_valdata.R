@@ -95,41 +95,36 @@ select_subjects_uniform <- function(bin, data, use_variable){
 ##############################
 select_valdata <- function(data, 
                            use_variable = NA,
-                           size_valdata,
-                           sampling_strat){
+                           size_valdata){
   # total number of subjects in data
   n <- NROW(data)
   # desired  number of subjects in valdata
   n_valdata <- ceiling(n * size_valdata)
-  if (sampling_strat == "Random"){
-    data$in_valdata <- sample(c(rep(0, n - n_valdata), rep(1, n_valdata)),
+  data$in_valdata_random <- sample(c(rep(0, n - n_valdata), rep(1, n_valdata)),
                               size = n, replace = FALSE)
-  }
-  if (sampling_strat == "Uniform" & !is.na(use_variable)){
-    # to samply uniformly, data is dividided in a number of bins, with equal
-    # distance between 'use_variable' within these bins
-    n_bins <- 10
-    n_each_bin <- round(n_valdata / n_bins)
-    bins <- create_bins(n_bins, n_each_bin, data, use_variable)
-    
-    # indicate whether subject is included in validation sample (1) or not (0)
-    data$in_valdata <- rep(0, n)
-    # get rownumbers of subjects that are included in validation sample
-    rownumbers <- unlist(
-      apply(bins, 1, 
-            FUN = select_subjects_uniform, 
-            data = data, 
-            use_variable = use_variable)
-      )
-    # change those subjects 0 to 1
-    data$in_valdata[rownumbers] <- 1
-  }
-  if (sampling_strat == "Extremes" & !is.na(use_variable)){
-    # order the observations and select the subjects in the extremes
-    rownumbers <- c(order(data[use_variable])[1:(n_valdata/2)],
-                    order(data[use_variable])[(n - n_valdata / 2 + 1):n])
-    data$valdata_present <- rep(0, n)
-    data[rownumbers,]$valdata_present <- 1
-  }
-  return(data)
+  # to samply uniformly, data is dividided in a number of bins, with equal
+  # distance between 'use_variable' within these bins
+  n_bins <- 10
+  n_each_bin <- round(n_valdata / n_bins)
+  bins <- create_bins(n_bins, n_each_bin, data, use_variable)
+  
+  # indicate whether subject is included in validation sample (1) or not (0)
+  data$in_valdata_unif <- rep(0, n)
+  # get rownumbers of subjects that are included in validation sample
+  rownumbers <- unlist(
+    apply(bins, 1, 
+          FUN = select_subjects_uniform, 
+          data = data, 
+          use_variable = use_variable)
+    )
+  # change those subjects 0 to 1
+  data$in_valdata_unif[rownumbers] <- 1
+  # order the observations and select the subjects in the extremes
+  rownumbers <- c(
+    order(data[use_variable])[1:(n_valdata/2)],
+    order(data[use_variable])[(n - n_valdata / 2 + 1):n]
+    )
+  data$in_valdata_extr <- rep(0, n)
+  data$in_valdata_extr[rownumbers] <- 1
+  data
 }

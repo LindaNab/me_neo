@@ -56,5 +56,5 @@ gen_data <- function(nobs = 650,
                                        mean = -1.1 + beta * VAT - 0.51 * sex +
                                          0.01 * age + 0.04 * TBF,
                                        sd = sigma))
-  return(out_df)
+  out_df
 }
