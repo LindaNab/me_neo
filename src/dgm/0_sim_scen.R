@@ -42,7 +42,7 @@ scenarios <- function(){
   scenarios <- expand.grid(lambdas, 
                            taus, 
                            heteroscedastic, 
-                           intvaldata, 
+                           size_valdata, 
                            sampling_strat)
   colnames(scenarios) <- c("lambda", 
                            "tau", 
