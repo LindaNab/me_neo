@@ -131,7 +131,7 @@ select_valdata <- function(data,
     data$in_valdata <- rep(0, n)
     # order the observations and select the subjects in the extremes
     rownumbers <- c(
-      order(data[use_variable])[1:(n_valdata/2)],
+      order(data[use_variable])[1:(n_valdata / 2)],
       order(data[use_variable])[(n - n_valdata / 2 + 1):n]
       )
     data$in_valdata[rownumbers] <- 1
