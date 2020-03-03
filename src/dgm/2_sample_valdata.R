@@ -2,7 +2,7 @@
 ## Internal validation sampling strategies for exposure 
 ## measurement error correction
 ##
-## 1 - Helper functions
+## 2 Sample validation data at random/uniform or by sampling the extremes
 ## lindanab4@gmail.com - 20200221
 #############################################################
 
@@ -58,7 +58,7 @@ fill_n_valdata <- function(bins, n_each_bin, n_valdata){
   # of each bin (too few subjects between those bounds)
   # if n_data is equal or greater than the required size of each bin, then
   # the n_valdata is equal to n_data
-  while (any(is.na(bins["n_valdata"]))){ # stop if n_valdata is filled completely
+  while (any(is.na(bins["n_valdata"]))){# stop if n_valdata is filled completely
     n_data_too_small <- bins["n_data"] < n_each_bin
     n_valdata_empty <- is.na(bins["n_valdata"])
     if(any(rows <- n_data_too_small & n_valdata_empty)){
@@ -95,36 +95,46 @@ select_subjects_uniform <- function(bin, data, use_variable){
 ##############################
 select_valdata <- function(data, 
                            use_variable = NA,
-                           size_valdata){
+                           size_valdata,
+                           sampling_strat){
   # total number of subjects in data
   n <- NROW(data)
   # desired  number of subjects in valdata
   n_valdata <- ceiling(n * size_valdata)
-  data$in_valdata_random <- sample(c(rep(0, n - n_valdata), rep(1, n_valdata)),
+  if (sampling_strat == "Random"){
+    data$in_valdata <- sample(c(rep(0, n - n_valdata), rep(1, n_valdata)), 
                               size = n, replace = FALSE)
-  # to samply uniformly, data is dividided in a number of bins, with equal
-  # distance between 'use_variable' within these bins
-  n_bins <- 10
-  n_each_bin <- round(n_valdata / n_bins)
-  bins <- create_bins(n_bins, n_each_bin, data, use_variable)
-  
-  # indicate whether subject is included in validation sample (1) or not (0)
-  data$in_valdata_unif <- rep(0, n)
-  # get rownumbers of subjects that are included in validation sample
-  rownumbers <- unlist(
-    apply(bins, 1, 
-          FUN = select_subjects_uniform, 
-          data = data, 
-          use_variable = use_variable)
-    )
-  # change those subjects 0 to 1
-  data$in_valdata_unif[rownumbers] <- 1
-  # order the observations and select the subjects in the extremes
-  rownumbers <- c(
-    order(data[use_variable])[1:(n_valdata/2)],
-    order(data[use_variable])[(n - n_valdata / 2 + 1):n]
-    )
-  data$in_valdata_extr <- rep(0, n)
-  data$in_valdata_extr[rownumbers] <- 1
+  }
+  else if (sampling_strat == "Uniform"){
+    # add indicator to data whether subject is included in validation sample (1) 
+    # or not (0)
+    data$in_valdata <- rep(0, n)
+    # to samply uniformly, data is dividided in a number of bins, with equal
+    # distance between 'use_variable' within these bins
+    n_bins <- 10
+    n_each_bin <- round(n_valdata / n_bins)
+    bins <- create_bins(n_bins, n_each_bin, data, use_variable)
+
+    # get rownumbers of subjects that will be included in validation sample
+    rownumbers <- unlist(
+      apply(bins, 1, 
+            FUN = select_subjects_uniform, 
+            data = data, 
+            use_variable = use_variable)
+      )
+    # change those subjects's 0 to 1
+    data$in_valdata[rownumbers] <- 1
+  }
+  else if (sampling_strat == "Extreme"){
+    # add indicator to data whether subject is included in validation sample (1) 
+    # or not (0)
+    data$in_valdata <- rep(0, n)
+    # order the observations and select the subjects in the extremes
+    rownumbers <- c(
+      order(data[use_variable])[1:(n_valdata/2)],
+      order(data[use_variable])[(n - n_valdata / 2 + 1):n]
+      )
+    data$in_valdata[rownumbers] <- 1
+  }
   data
 }
