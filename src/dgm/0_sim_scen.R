@@ -27,26 +27,41 @@ calc_lambda <- function(skewness, k = 6.1){
 }
 
 ############################## 
-# 2 - Functions that creates data.frame with 200 scenarios
+# 2 - Function that creates data.frame with 50 scenarios used to generate data
 ##############################
-scenarios <- function(){
+datagen_scenarios <- function(){
   skewness <- c(0.1, 1, 2, 4, 6)
   lambdas <- sapply(skewness, calc_lambda)
   R_squared <- c(0.2, 0.4, 0.6, 0.8, 0.9)
   taus <- sapply(R_squared, calc_tau)
   heteroscedastic <- c(TRUE, FALSE)
-  size_valdata <- c(0.10, 0.25, 0.40, 0.50)
-  sampling_strat <- c("Random", "Uniform", "Extremes")
   
   # data.frame with simulation scenarios
-  scenarios <- expand.grid(lambdas, 
-                           taus, 
-                           heteroscedastic, 
-                           size_valdata, 
-                           sampling_strat)
-  colnames(scenarios) <- c("lambda", 
-                           "tau", 
-                           "heteroscedastic", 
-                           "size_valdata", 
-                           "sampling_strat")
-  return(scenarios)}
+  datagen_scenarios <- expand.grid(lambdas, 
+                                   taus, 
+                                   heteroscedastic)
+  colnames(datagen_scenarios) <- c("lambda", 
+                                   "tau", 
+                                   "heteroscedastic")
+  return(datagen_scenarios)}
+############################## 
+# 2 - Function that creates data.frame with 50 scenarios, differently analysing
+# the data
+##############################
+analyse_scenarios <- function(){
+  size_valdata <- c(0.10, 0.25, 0.40, 0.50)
+  sampling_strat <- c("Random", "Uniform", "Extremes")
+  method <- c("complete_case",
+              "naive",
+              "reg_cal",
+              "efficient_reg_cal",
+              "inadm_reg_cal")
+  
+  # data.frame with simulation scenarios
+  analyse_scenarios <- expand.grid(size_valdata, 
+                                   sampling_strat, 
+                                   method)
+  colnames(analyse_scenarios) <- c("size_valdata", 
+                                   "sampling_strat", 
+                                   "method")
+  return(analyse_scenarios)}
