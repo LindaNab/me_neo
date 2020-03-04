@@ -3,3 +3,4 @@
 results/figures/*.png
 results/output/*.txt
 results/tables/*.txt
+data/output/*.rds
