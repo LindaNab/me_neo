@@ -20,7 +20,8 @@ gen_data <- function(nobs = 650,
                      tau, 
                      beta = 0.01, 
                      sigma = 0.57,
-                     heteroscedastic = F){
+                     heteroscedastic = F,
+                     seed){
   # Initialize out_df that will be filled with the generated data
   out_df <- data.frame(sex = numeric(nobs), 
                        age = numeric(nobs), 
@@ -32,6 +33,7 @@ gen_data <- function(nobs = 650,
   calc_mean <- function(sex, age, TBF){
     exp(2.4 - 1.4 * sex + 0.01 * age + 0.07 * TBF)
   }
+  set.seed(seed)
   # Generate sex, age and TBF, VAT, WC and IR_ln (natural log of IR)
   out_df$sex <- rbinom(n = nobs, size = 1, prob = 0.5)
   out_df$age <- runif(n = nobs, min = 45, max = 65)
