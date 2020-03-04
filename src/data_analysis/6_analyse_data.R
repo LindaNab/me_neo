@@ -41,7 +41,10 @@ get_result <- function(data, method){
 ############################## 
 # 1 - Work horse that samples data and pulls the result
 ##############################
-analyse_data <- function(size_valdata, sampling_strat, method, data){
+analyse_data <- function(analyse_scenario, data){
+  size_valdata <- as.numeric(analyse_scenario['size_valdata'])
+  sampling_strat <- analyse_scenario['sampling_strat']
+  method <- analyse_scenario['method']
   data <- select_valdata(data = data, 
                          size_valdata = size_valdata, 
                          use_variable = "WC",
