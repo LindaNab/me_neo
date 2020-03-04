@@ -9,8 +9,10 @@ reg_cal <- function(data){
   # using WC io VAT (introducing meas error)
   naive_fit <- naive(data)
   # fit calibration model
+  # select subjects of whom VAT is measured (complete cases)
+  data_cc <- subset(data, in_valdata == 1)
   cal_mod <- lm(VAT ~ WC + TBF + age + sex,
-                data = data, 
+                data = data_cc, 
                 na.action = na.omit)
   sum_cal_mod <- summary(cal_mod)
   lambda <- sum_cal_mod$coefficients["WC", "Estimate"]
