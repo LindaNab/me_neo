@@ -40,23 +40,56 @@ datagen_scenarios <- function(){
   datagen_scenarios <- expand.grid(lambdas, 
                                    taus, 
                                    heteroscedastic)
+  datagen_scenarios$scen_num <- c(1:NROW(datagen_scenarios))
   colnames(datagen_scenarios) <- c("lambda", 
                                    "tau", 
-                                   "heteroscedastic")
+                                   "heteroscedastic",
+                                   "scen_num")
   return(datagen_scenarios)}
 ############################## 
 # 2 - Function that creates data.frame with 50 scenarios, differently analysing
-# the data
+# the data + makes folder structure
 ##############################
+create_dir <- function(folder_name){
+  if(!file.exists(folder_name)){
+    dir.create(folder_name)
+  }
+}
+give_folder_structure <- function(in_folder, prefix, folder_names){
+  char <- as.vector(sapply(in_folder, 
+                           function(x) paste0(x, prefix, folder_names),
+                           USE.NAMES = F))
+  char
+}
+
 analyse_scenarios <- function(){
   size_valdata <- c(0.10, 0.25, 0.40, 0.50)
-  sampling_strat <- c("Random", "Uniform", "Extremes")
+  sampling_strat <- c("random", "uniform", "extremes")
   method <- c("complete_case",
               "naive",
               "reg_cal",
               "efficient_reg_cal",
               "inadm_reg_cal")
-  
+  size_valdata_percent <- 100 * size_valdata
+  # create directories if not already there
+  folders_size_valdata <- give_folder_structure(
+    in_folder = "./data/output", 
+    prefix = "/size_valdata_",
+    folder_names = size_valdata_percent
+    )
+  sapply(folders_size_valdata, create_dir)
+  folders_sampling_strat <- give_folder_structure(
+    in_folder = folders_size_valdata,
+    prefix = "/sampling_strat_",
+    folder_names = sampling_strat
+  )
+  sapply(folders_sampling_strat, create_dir)
+  folders_method <- give_folder_structure(
+    in_folder = folders_sampling_strat,
+    prefix = "/method_",
+    folder_names = method
+  )
+  sapply(folders_method, create_dir)
   # data.frame with simulation scenarios
   analyse_scenarios <- expand.grid(size_valdata, 
                                    sampling_strat, 
