@@ -65,7 +65,7 @@ fill_n_valdata <- function(bins, n_each_bin, n_valdata){
       bins[rows, "n_valdata"] <- bins[rows, "n_data"]
     }
     else {
-      bins[n_valdata_empty, "n_valdata"] <- size_bins 
+      bins[n_valdata_empty, "n_valdata"] <- n_each_bin
     }
     n_each_bin <- update_n_each_bin(n_each_bin, bins, n_valdata)
   }
@@ -101,11 +101,11 @@ select_valdata <- function(data,
   n <- NROW(data)
   # desired  number of subjects in valdata
   n_valdata <- ceiling(n * size_valdata)
-  if (sampling_strat == "Random"){
+  if (sampling_strat == "random"){
     data$in_valdata <- sample(c(rep(0, n - n_valdata), rep(1, n_valdata)), 
                               size = n, replace = FALSE)
   }
-  else if (sampling_strat == "Uniform"){
+  else if (sampling_strat == "uniform"){
     # add indicator to data whether subject is included in validation sample (1) 
     # or not (0)
     data$in_valdata <- rep(0, n)
@@ -125,7 +125,7 @@ select_valdata <- function(data,
     # change those subjects's 0 to 1
     data$in_valdata[rownumbers] <- 1
   }
-  else if (sampling_strat == "Extreme"){
+  else if (sampling_strat == "extremes"){
     # add indicator to data whether subject is included in validation sample (1) 
     # or not (0)
     data$in_valdata <- rep(0, n)
