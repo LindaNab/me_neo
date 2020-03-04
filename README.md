@@ -33,7 +33,7 @@ With attached packages:
 ├── config             <- Configuration files
 ├── data
 │   ├── summarised     <- summaries of raw data
-│   └── raw            <- The original, generated data files
+│   └── output         <- The original, generated data files that were analysed
 ├── docs               <- Documentation notebook for users (HW)
 │   ├── manuscript     <- Manuscript source, e.g., LaTeX, Markdown, etc. (HW)
 │   └── reports        <- Other project reports and notebooks (e.g. Jupyter, .Rmd) (HW)
@@ -45,7 +45,7 @@ With attached packages:
     ├── dgm            <- Scripts that define the dgm
     ├── sim            <- Scripts used to run the simulation study
     ├── sumsim         <- scripts and programs to summarise data
-    ├── external       <- Any external source code, e.g., pull other git projects, or           │                     external libraries
+    ├── external       <- Any external source code, e.g., pull other git projects, or external libraries
     ├── tools          <- Any helper scripts go here
     ├── tabular        <- Scripts for tabularizing your results
     └── visualisation  <- Scripts for visualisation of your results, e.g., matplotlib, ggplot2 related.
