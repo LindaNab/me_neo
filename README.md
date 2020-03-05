@@ -4,9 +4,9 @@
 Code of the simulation study from the manuscript 'Internal validation data sampling strategies for exposure measurement error correction:  a study of visceral adipose tissue measurements replaced by waist circumference measurements' by Linda Nab et al.
 
 ## Generating data and running simulation study
-The R code in /src/dgm can be used to generate the data and the R code in /src/sim can be used to run the simulation study. Data will be saved in /data/raw.
+The R script 1_exe.R in ./rcode can be used to execute the sim study. Data will be saved in ./data/output.
 
-## Processing results of simulation study
+## Processing results of simulation study (under construction)
 The R code in ./src/tabular creates tables with the results of the simulation study. The table that is produced by the script can be used in LaTeX files. The script uses the .rds files available in ./data/processed. The output of the script is saved in .results/tables.
 
 The R code in ./src/visualisation creates figures depicting the results of the simulation study. The script produces .png files. The scripts uses the .rds files available in ./data/processed. The output of the script is saved in .results/figures.
