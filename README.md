@@ -32,7 +32,7 @@ With attached packages:
 ├── README.md
 ├── config             <- Configuration files
 ├── data
-│   ├── summarised     <- summaries of raw data
+│   ├── summarised     <- summaries of the output
 │   └── output         <- The original, generated data files that were analysed
 ├── docs               <- Documentation notebook for users (HW)
 │   ├── manuscript     <- Manuscript source, e.g., LaTeX, Markdown, etc. (HW)
@@ -41,10 +41,11 @@ With attached packages:
 │   ├── figures        <- Figures for the manuscript or reports
 │   ├── tables         <- Tables for the manuscript or reports
 │   └── output         <- Other output for the manuscript or reports
-└── src                <- Source code for this project
+└── rcode              <- rcode for this project, 1_exe.R in root executes the simulation study
+    ├── analysis       <- Scripts that run the analyses
     ├── dgm            <- Scripts that define the dgm
     ├── sim            <- Scripts used to run the simulation study
-    ├── sumsim         <- scripts and programs to summarise data
+    ├── sumsim         <- Scripts and programs to summarise data
     ├── external       <- Any external source code, e.g., pull other git projects, or external libraries
     ├── tools          <- Any helper scripts go here
     ├── tabular        <- Scripts for tabularizing your results
