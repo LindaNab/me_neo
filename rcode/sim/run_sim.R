@@ -65,10 +65,10 @@ get_file_name <- function(analyse_scenario, scen_num){
 }
 # save the output in dir_name/file_name
 save_result <- function(result){
-  beta <- result[['beta']]
-  var_beta <- result[['var_beta']]
-  n_valdata <- result[['n_valdata']]
-  seed <- result[['seed']]
+  beta <- as.numeric(result['beta'])
+  var_beta <- as.numeric(result['var_beta'])
+  n_valdata <- as.numeric(result['n_valdata'])
+  seed <- as.numeric(result['seed'])
   dir_name <- result[['dir_name']]
   file_name <- result[['file_name']]
   file <- paste0(dir_name, file_name) 
@@ -114,7 +114,7 @@ perform_one_run <- function(seed,
                    tau = datagen_scenario[['tau']],
                    heteroscedastic = datagen_scenario[['heteroscedastic']],
                    seed = seed)
-  scen_num <- datagen_scenario[[scen_num]]
+  scen_num <- datagen_scenario[['scen_num']]
   # analyse the data using the 60 different analysis_scenarios
   results <- apply(analysis_scenarios(), 1, FUN = analyse_data, data = data)
   results <- as.data.frame(t(rbind(results, 
@@ -142,7 +142,7 @@ sim_one_datagen_scenario <- function(datagen_scenario,
                                      seed){
   scen_num <- as.numeric(datagen_scenario['scen_num'])
   for(i in 1:rep){
-    perform_one_run(seed = seed[(5000 * (scen_num-1) + i)], # for now, seed for 
+    perform_one_run(seed = seed[(5000 * (scen_num - 1) + i)], # for now, seed for 
                     # each datagen_scenario() is: S1: 1 - 5000, S2: 5001 - 10000
                     # etc.
                     datagen_scenario = datagen_scenario)
