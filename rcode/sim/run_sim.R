@@ -65,10 +65,10 @@ get_file_name <- function(analyse_scenario, scen_num){
 }
 # save the output in dir_name/file_name
 save_result <- function(result){
-  beta <- as.numeric(result['beta'])
-  var_beta <- as.numeric(result['var_beta'])
-  n_valdata <- as.numeric(result['n_valdata'])
-  seed <- as.numeric(result['seed'])
+  beta <- result[['beta']]
+  var_beta <- result[['var_beta']]
+  n_valdata <- result[['n_valdata']]
+  seed <- result[['seed']]
   dir_name <- result[['dir_name']]
   file_name <- result[['file_name']]
   file <- paste0(dir_name, file_name) 
@@ -110,22 +110,27 @@ get_seed <- function(){
 perform_one_run <- function(seed, 
                             datagen_scenario){
   # generate data
-  data <- gen_data(lambda = as.numeric(
-                     datagen_scenario['lambda']),
-                   tau = as.numeric(
-                     datagen_scenario['tau']),
-                   heteroscedastic = as.numeric(
-                     datagen_scenario['heteroscedastic']),
+  data <- gen_data(lambda = datagen_scenario[['lambda']],
+                   tau = datagen_scenario[['tau']],
+                   heteroscedastic = datagen_scenario[['heteroscedastic']],
                    seed = seed)
-  scen_num <- as.numeric(datagen_scenario['scen_num'])
+  scen_num <- datagen_scenario[['scen_num']]
+  lambda = datagen_scenario[['lambda']]
+  tau = datagen_scenario[['tau']]
+  heteroscedastic = datagen_scenario[['heteroscedastic']]
+  seed = seed
+  print(paste(lambda, tau, heteroscedastic, seed))
   # analyse the data using the 60 different analysis_scenarios
   results <- apply(analysis_scenarios(), 1, FUN = analyse_data, data = data)
   results <- as.data.frame(t(rbind(results, 
                                    seed,
                                    apply(analysis_scenarios(), 
-                                         1, get_dir_name),
+                                         1, 
+                                         FUN = get_dir_name),
                                    apply(analysis_scenarios(), 
-                                         1, get_file_name, scen_num)
+                                         1, 
+                                         FUN = get_file_name, 
+                                         scen_num = scen_num)
                                    )))
   colnames(results) <- c("beta", 
                          "var_beta",
@@ -135,7 +140,7 @@ perform_one_run <- function(seed,
                          "file_name") # name of the .rds file
   apply(results, 1, save_result)
 }
-# Do 'perform_one_run' S times, for one specific datagen_scenario (see 
+# Repeat 'perform_one_run' rep times, for one specific datagen_scenario (see 
 # datagen_scenarios(): S1-S50). FE: for S1 of datagen_scenarios()
 sim_one_datagen_scenario <- function(datagen_scenario,
                                      rep = 5000,
@@ -151,10 +156,11 @@ sim_one_datagen_scenario <- function(datagen_scenario,
 }
 # Workhorse of the simulation study. For each of the datagen_scenarios(), rep 
 # data sets will be generated, and analysed using analysis_scenarios(). The 
-# default will generate 20 * 15 files each including 5000 rows. 
+# default will generate 20 * 150 files each including 5000 rows. 
 run_sim <- function(rep = 5000, 
                     use_datagen_scenarios = datagen_scenarios(),
                     seed = get_seed()){
+  # levels of output_dirs (see the described structure above)
   levels <- list(
     "size_valdata" = 
       unique(analysis_scenarios()$size_valdata) * 100,
@@ -164,7 +170,7 @@ run_sim <- function(rep = 5000,
   create_output_dirs(levels = levels)
   invisible(apply(use_datagen_scenarios, 
                   1, 
-                  sim_one_datagen_scenario, 
+                  FUN = sim_one_datagen_scenario, 
                   rep = rep,
                   seed = seed))
 }
