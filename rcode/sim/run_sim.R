@@ -114,6 +114,7 @@ perform_one_run <- function(seed,
                    tau = datagen_scenario[['tau']],
                    heteroscedastic = datagen_scenario[['heteroscedastic']],
                    seed = seed)
+  scen_num <- datagen_scenario[[scen_num]]
   # analyse the data using the 60 different analysis_scenarios
   results <- apply(analysis_scenarios(), 1, FUN = analyse_data, data = data)
   results <- as.data.frame(t(rbind(results, 
