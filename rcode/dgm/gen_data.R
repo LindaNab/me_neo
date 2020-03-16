@@ -20,7 +20,7 @@ gen_data <- function(nobs = 650,
                      tau, 
                      beta = 0.01, 
                      sigma = 0.57,
-                     heteroscedastic = F,
+                     heteroscedastic = 0,
                      seed){
   # Initialize out_df that will be filled with the generated data
   out_df <- data.frame(sex = numeric(nobs), 
@@ -44,7 +44,7 @@ gen_data <- function(nobs = 650,
                         rgamma(n = nobs, 
                                shape = lambda * k,
                                scale = sqrt(lambda) / (lambda * k)))
-  if (heteroscedastic == T){
+  if (heteroscedastic == 1){
     out_df$WC <- with (out_df, rnorm(n = nobs,
                                      mean = 75 + theta * VAT,
                                      sd = tau * (VAT / mean(VAT))))

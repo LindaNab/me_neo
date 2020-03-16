@@ -29,14 +29,14 @@ calc_lambda <- function(skewness, k = 6.1){
 ############################## 
 # 2 - Function that creates data.frame with 50 scenarios used to generate data
 #     varying lambda, tau and whether measurement error is heteroscedastic or 
-#     not
+#     not (1 or 0, respectively)
 ##############################
 datagen_scenarios <- function(){
   skewness <- c(0.1, 1, 2, 4, 6)
   lambdas <- sapply(skewness, calc_lambda)
   R_squared <- c(0.2, 0.4, 0.6, 0.8, 0.9)
   taus <- sapply(R_squared, calc_tau)
-  heteroscedastic <- c(TRUE, FALSE)
+  heteroscedastic <- c(0, 1)
   
   # data.frame with simulation scenarios
   datagen_scenarios <- expand.grid(lambdas, 
