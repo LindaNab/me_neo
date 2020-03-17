@@ -35,18 +35,18 @@
 source(file = "./rcode/dgm/sim_scen.R")
 source(file = "./rcode/dgm/gen_data.R")
 source(file = "./rcode/analyses/analyse_data.R")
-source(file = "./rcode/sim/create_output_dirs.R")
+source(file = "./rcode/sim/create_data_dirs.R")
 
 ############################## 
 # 1 - Helper Functions ----
 ##############################
 # Gets the directory name where the output of one simulation run will be saved
 # fe: ./data/output/size_valdata_10/method_random/
-get_dir_name <- function(analyse_scenario){
-  output_dir <- "./data/output"
-  size_valdata <- 100 * as.numeric(analyse_scenario['size_valdata'])
-  method <- analyse_scenario['method']
-  paste0(output_dir, 
+get_dir_name <- function(analysis_scenario){
+  data_dir <- "./data/output"
+  size_valdata <- 100 * as.numeric(analysis_scenario['size_valdata'])
+  method <- analysis_scenario['method']
+  paste0(data_dir, 
          "/size_valdata_", 
          size_valdata,
          "/method_", 
@@ -55,8 +55,8 @@ get_dir_name <- function(analyse_scenario){
 }
 # Gets the name of the .Rds file where the ouput will be saved
 # fe: S1_random,.., S2_extremes etc
-get_file_name <- function(analyse_scenario, scen_num){
-  sampling_strat <- analyse_scenario['sampling_strat']
+get_file_name <- function(analysis_scenario, scen_num){
+  sampling_strat <- analysis_scenario['sampling_strat']
   paste0("S",
          scen_num,
          "_",
@@ -155,14 +155,14 @@ sim_one_datagen_scenario <- function(datagen_scenario,
 run_sim <- function(rep = 5000, 
                     use_datagen_scenarios = datagen_scenarios(),
                     seed = get_seed()){
-  # levels of output_dirs (see the described structure above)
+  # levels of data_dirs (see the described structure above)
   levels <- list(
     "size_valdata" = 
       unique(analysis_scenarios()$size_valdata) * 100,
     "method" = 
       levels(analysis_scenarios()$method)
   )
-  create_output_dirs(levels = levels)
+  create_data_dirs(levels = levels)
   invisible(apply(use_datagen_scenarios, 
                   1, 
                   FUN = sim_one_datagen_scenario, 
