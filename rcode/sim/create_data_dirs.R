@@ -2,7 +2,7 @@
 ## Internal validation sampling strategies for exposure 
 ## measurement error correction
 ##
-## Create directories in which results will be stored
+## Create directories in which sim output will be stored
 ## lindanab4@gmail.com - 20200305
 #############################################################
 
@@ -20,26 +20,31 @@ create_dir <- function(name){
   }
 }
 # format path of directory of levels
-format_dir_path <- function(output_dir, prefix_dir, dir_name){
-  char <- as.vector(sapply(output_dir, 
+format_dir_path <- function(data_dir, prefix_dir, dir_name){
+  char <- as.vector(sapply(data_dir, 
                            function(x) paste0(x, prefix_dir, "_", dir_name),
                            USE.NAMES = F))
 }
 ##############################
-# 2 - Create directories in ./output directory
+# 2 - Create directories in data_dir directory (fe: ./data/output)
 ##############################
-create_output_dirs <- function(output_dir = "./data/output/", levels){
+create_data_dirs <- function(data_dir = "./data/output/", levels){
+  dir_paths <- list_data_dirs(data_dir, levels)
+  invisible(sapply(unlist(dir_paths), create_dir))
+}
+list_data_dirs <- function(data_dir = "./data/output/", levels){
   dir_paths <- vector("list", length(levels))
   for (i in 1:length(levels)){
     dir_paths[[i]] <- format_dir_path(
-      output_dir = output_dir,
+      data_dir = data_dir,
       prefix_dir = names(levels)[i],
       dir_name = levels[[i]]
-      )
-    output_dir <- paste0(dir_paths[[i]], "/")
+    )
+    data_dir <- paste0(dir_paths[[i]], "/")
   }
-  invisible(sapply(unlist(dir_paths), create_dir))
+  dir_paths
 }
+
 # count_number_of_dirs <- function(levels){
 #   i <- 2
 #   n_dirs <- lengths(levels)[1]
