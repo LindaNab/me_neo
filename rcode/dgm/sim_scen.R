@@ -43,10 +43,19 @@ datagen_scenarios <- function(){
                                    taus, 
                                    heteroscedastic)
   datagen_scenarios$scen_num <- c(1:NROW(datagen_scenarios))
+  #colnames(temp) <- c("skewness", "lambda")
   colnames(datagen_scenarios) <- c("lambda", 
                                    "tau", 
                                    "heteroscedastic",
                                    "scen_num")
+  # add corresponding R_squared and taus (convenient for results)
+  R_squared_tau_pairs <- cbind(R_squared, taus)
+  datagen_scenarios <- merge(datagen_scenarios, R_squared_tau_pairs, 
+                             by.x = 'tau', by.y = 'taus')
+  skew_lambda_pairs <- cbind(skewness, lambdas)
+  datagen_scenarios <- merge(datagen_scenarios, skew_lambda_pairs,
+                             by.x = 'lambda', by.y = 'lambdas')
+  datagen_scenarios <- datagen_scenarios[order(datagen_scenarios$scen_num),]
   return(datagen_scenarios)}
 
 ############################## 
