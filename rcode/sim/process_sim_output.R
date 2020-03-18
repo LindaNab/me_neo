@@ -6,11 +6,14 @@
 ## lindanab4@gmail.com - 20200317
 #############################################################
 
+##############################
+# Some notes on where the *processed* data from .data/output will be saved
+##############################
 # After running the simulation, there exist 3 x 50 files in one of the 4 x 5 
 # .data/output/ directories named 'S#_sampling_strat'. 
 # These functions combine the .Rds files of the 3 different sampling strategies,
-# change var_beta to se_beta and save the corresponding files with the following
-# structure:
+# change var_beta to se_beta and save the corresponding files to directories 
+# with the following structure:
 # ./data/processed
 # ├── size_valdata_10
 # │ ├── method_complete_case <- S1,.., S50
