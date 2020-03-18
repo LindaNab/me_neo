@@ -7,7 +7,7 @@
 #############################################################
 
 ##############################
-# On where the output will be saved
+# Some notes on where the simulation output will be saved
 ##############################
 # The output of each run (beta, var_beta, n_valdata, seed) will be saved as 
 # follows: for each size of the validation data (10, 25, 40 or 50 percent), a 
@@ -42,21 +42,20 @@ source(file = "./rcode/sim/create_data_dirs.R")
 ##############################
 # Gets the directory name where the output of one simulation run will be saved
 # fe: ./data/output/size_valdata_10/method_random/
-get_dir_name <- function(analysis_scenario){
-  data_dir <- "./data/output"
+get_dir_name <- function(analysis_scenario, 
+                         data_dir){
   size_valdata <- 100 * as.numeric(analysis_scenario['size_valdata'])
-  method <- analysis_scenario['method']
+  method <- analysis_scenario[['method']]
   paste0(data_dir, 
          "/size_valdata_", 
          size_valdata,
          "/method_", 
-         method,
-         "/")
+         method)
 }
 # Gets the name of the .Rds file where the ouput will be saved
 # fe: S1_random,.., S2_extremes etc
 get_file_name <- function(analysis_scenario, scen_num){
-  sampling_strat <- analysis_scenario['sampling_strat']
+  sampling_strat <- analysis_scenario[['sampling_strat']]
   paste0("S",
          scen_num,
          "_",
@@ -71,7 +70,7 @@ save_result <- function(result){
   seed <- as.numeric(result['seed'])
   dir_name <- result[['dir_name']]
   file_name <- result[['file_name']]
-  file <- paste0(dir_name, file_name) 
+  file <- paste0(dir_name, "/", file_name) 
   # append new result to old results if file exists
   if (file.exists(file)){
     con <- file(file)
@@ -93,9 +92,10 @@ save_result <- function(result){
 ##############################
 # 2 - Seed ---
 ##############################
-get_seed <- function(){
+get_seed <- function(rep = 5000){
   set.seed(20200305)
-  n_seed <- 50*5000 # 50 datagen_scenarios() and 5000 replications per scenario
+  n_seed <- NROW(datagen_scenarios()) * rep # 50 datagen_scenarios() 
+                                            # and 5000 replications per scenario
   seed <- sample(1:1e8, 
                  size = n_seed, 
                  replace = FALSE)
@@ -108,21 +108,27 @@ get_seed <- function(){
 # datagen_scenarios(): S1-S50) generate data, and perform the 60 different 
 # analyses (see analysis_scenarios())
 perform_one_run <- function(seed, 
-                            datagen_scenario){
+                            datagen_scenario,
+                            use_analysis_scenarios,
+                            output_dir){
   # generate data
   data <- gen_data(lambda = datagen_scenario[['lambda']],
                    tau = datagen_scenario[['tau']],
                    heteroscedastic = datagen_scenario[['heteroscedastic']],
                    seed = seed)
   scen_num <- datagen_scenario[['scen_num']]
-  # analyse the data using the 60 different analysis_scenarios
-  results <- apply(analysis_scenarios(), 1, FUN = analyse_data, data = data)
+  # analyse the data using use_analysis_scenarios
+  results <- apply(use_analysis_scenarios, 
+                   1, 
+                   FUN = analyse_data, 
+                   data = data)
   results <- as.data.frame(t(rbind(results, 
                                    seed,
-                                   apply(analysis_scenarios(), 
+                                   apply(use_analysis_scenarios, 
                                          1, 
-                                         FUN = get_dir_name),
-                                   apply(analysis_scenarios(), 
+                                         FUN = get_dir_name,
+                                         data_dir = output_dir),
+                                   apply(use_analysis_scenarios, 
                                          1, 
                                          FUN = get_file_name, 
                                          scen_num = scen_num)
@@ -132,20 +138,24 @@ perform_one_run <- function(seed,
                          "n_valdata", 
                          "seed", 
                          "dir_name", # directory were results will be saved
-                         "file_name") # name of the .rds file
+                         "file_name") # name of the .Rds file
   apply(results, 1, save_result)
 }
 # Repeat 'perform_one_run' rep times, for one specific datagen_scenario (see 
 # datagen_scenarios(): S1-S50). FE: for S1 of datagen_scenarios()
 sim_one_datagen_scenario <- function(datagen_scenario,
+                                     use_analysis_scenarios,
                                      rep = 5000,
-                                     seed){
+                                     seed,
+                                     output_dir){
   scen_num <- as.numeric(datagen_scenario['scen_num'])
   for(i in 1:rep){
-    perform_one_run(seed = seed[(5000 * (scen_num - 1) + i)], # for now, seed for 
+    perform_one_run(seed = seed[(rep * (scen_num - 1) + i)], # for now, seed for 
                     # each datagen_scenario() is: S1: 1 - 5000, S2: 5001 - 10000
-                    # etc.
-                    datagen_scenario = datagen_scenario)
+                    # etc. if rep = 5000
+                    datagen_scenario = datagen_scenario,
+                    use_analysis_scenarios = use_analysis_scenarios,
+                    output_dir = output_dir)
     print(i)
   }
 }
@@ -154,18 +164,22 @@ sim_one_datagen_scenario <- function(datagen_scenario,
 # default will generate 20 * 150 files each including 5000 rows. 
 run_sim <- function(rep = 5000, 
                     use_datagen_scenarios = datagen_scenarios(),
-                    seed = get_seed()){
+                    use_analysis_scenarios = analysis_scenarios(),
+                    seed = get_seed(),
+                    output_dir = "./data/output"){
   # levels of data_dirs (see the described structure above)
   levels <- list(
     "size_valdata" = 
-      unique(analysis_scenarios()$size_valdata) * 100,
+      unique(use_analysis_scenarios$size_valdata) * 100,
     "method" = 
-      levels(analysis_scenarios()$method)
+      unique(use_analysis_scenarios$method)
   )
   create_data_dirs(levels = levels)
   invisible(apply(use_datagen_scenarios, 
                   1, 
                   FUN = sim_one_datagen_scenario, 
+                  use_analysis_scenarios = use_analysis_scenarios,
                   rep = rep,
-                  seed = seed))
+                  seed = seed,
+                  output_dir = output_dir))
 }
