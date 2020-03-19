@@ -38,90 +38,104 @@ library(data.table)
 library(rsimsum)
 source(file = "./rcode/sim/run_sim.R")
 
-# next: write function that summarises all scen_nums for one analysis_scenario
-# bind results using rbindlist?
+# To do: change eval_param in without _mcse and add later on
+# n_sim can get _mcse
+# n_valdata is the only param that not from simsum
+# To do 2: add notes
 
-# second: write function that does this for al analysis_scenarios
+eval_param <- function(){
+  eval_param <- c("bias", 
+                  "bias_mcse", 
+                  "mse", 
+                  "mse_mcse",
+                  "cover",
+                  "cover_mcse", 
+                  "modelse",
+                  "modelse_mcse", 
+                  "empse",
+                  "empse_mcse",
+                  "n_valdata",
+                  "n_sim")
+}
+# creates data.table that will be filled later on
+init_summary <- function(sim_scen_levels,
+                         use_eval_param){
+  size <- NROW(sim_scen_levels)
+  out_datatable <- data.table(sim_scen_levels)
+  out_datatable[, (use_eval_param) := numeric(size)]
+  out_datatable[]
+}
+save_summary <- function(summary, summarised_dir){
+  output_file <- paste0(summarised_dir, "/summary.Rds")
+  saveRDS(summary, file = output_file)
+}
+fill_summary <- function(summary,
+                         use_analysis_scenarios,
+                         use_datagen_scenarios){
+  for(j in 1:NROW(use_analysis_scenarios)){
+    for(i in 1:NROW(use_datagen_scenarios)){
+      fill_one_row_of_summary(summary,
+                              analysis_scenario = use_analysis_scenarios[j,],
+                              datagen_scenario = use_datagen_scenarios[i,])
+    }
+  }
+}
 
-# This function summarises one sim scenario (analysis_scenario/datagen_scenario)
-summary_sim_scenario <- function(analysis_scenario,
-                                 scen_num, 
-                                 processed_dir = "./data/processed"){
-  summary <- create_datatable_for_summary()
+fill_one_row_of_summary <- function(summary,
+                                    analysis_scenario,
+                                    datagen_scenario){
   file <- seek_file(analysis_scenario, 
-                    scen_num, 
-                    data_dir = processed_dir)
-  processed_output <- readRDS(file)
-  fill_summary_with_scen_info(summary, 
-                              analysis_scenario, 
-                              scen_num)
+                    datagen_scenario, 
+                    data_dir = "./data/processed")
+  processed_output <- readRDS(file = file)
   simsum <- rsimsum::simsum(data = processed_output,
                             estvarname = "beta",
                             true = 0.01,
                             se = "se_beta")
+  sim_scen <- cbind(datagen_scenario, analysis_scenario)
+  sim_scen <- data.table(sim_scen)
+  # get row_number of this sim_scen in summary
+  row_num <- summary[sim_scen, on = colnames(sim_scen), which = TRUE]
   stats <- c("bias", "mse", "cover", "modelse", "empse")
   for(i in 1:NROW(stats)){
-    fill_summary_with_stat(summary, simsum, stats[i])
+    fill_row_with_stat(row_num, summary, simsum, stats[i])
   }
-  summary[, n_valdata := mean(processed_output$size_valdata)]
+  summary[row_num, n_valdata := mean(processed_output$size_valdata)]
   simsum_table <- get_data(simsum)
-  summary[, n_sim := simsum_table[simsum_table$stat == "nsim",]$est]
+  summary[row_num, n_sim := simsum_table[simsum_table$stat == "nsim",]$est]
+  print(paste0(file, " summarized!"))
+  summary[]
 }
-fill_summary_with_scen_info <- function(summary, 
-                                        analysis_scenario,
-                                        scen_num){
-  analysis_info <- c("size_valdata", 
-                     "method", 
-                     "sampling_strat")
-  datagen_scenario <- datagen_scenarios()[datagen_scenarios()$scen_num == 
-                                            scen_num, ]
-  datagen_info <- c("heteroscedastic",
-                    "R_squared", 
-                    "skewness",
-                    "scen_num")
-  scen_info <- function(info, scen){
-    for(i in 1:NROW(info)){
-      summary[, info[i] := scen[[info[i]]]]
-    }
-  }
-  scen_info(analysis_info, analysis_scenario)
-  scen_info(datagen_info, datagen_scenario)
-}
-# perhaps I can simplify this using datagen_info and analysis_info??
-create_datatable_for_summary <- function(){
-  out_datatable <- data.table('size_valdata' = numeric(1),
-                              'method' = numeric(1),
-                              'sampling_strat' = numeric(1),
-                              'heteroscedastic' = numeric(1),
-                              'R_squared' = numeric(1),
-                              'skewness' = numeric(1),
-                              'scen_num' = numeric(1),
-                              'bias' = numeric(1), 
-                              'bias_mcse' = numeric(1), 
-                              'mse' = numeric(1),
-                              'mse_mcse' = numeric(1),
-                              'cover' = numeric(1),
-                              'cover_mcse' = numeric(1), 
-                              'modelse' = numeric(1),
-                              'modelse_mcse' = numeric(1), 
-                              'empse' = numeric(1),
-                              'empse_mcse' = numeric(1),
-                              'n_valdata' = numeric(1),
-                              'n_sim'= numeric(1))}
-fill_summary_with_stat <- function(summary, simsum, stat){
+# uses simsum to fill the row of summary with the summarised sim params
+fill_row_with_stat <- function(row_num, summary, simsum, stat){
   simsum_table <- rsimsum::get_data(simsum)
   args <- c(simsum_table[simsum_table$stat == stat, ])
   add_value <- function(stat, est, mcse){
     stat_mcse <- paste0(stat, "_mcse")
-    summary[, (stat) := est]
-    summary[, (stat_mcse) := mcse]}
+    summary[row_num, (stat) := est]
+    summary[row_num, (stat_mcse) := mcse]}
   do.call(add_value, args)
 }
-seek_file <- function(analysis_scenario, 
-                      scen_num, 
-                      data_dir){
-  dir_name <- get_dir_name(analysis_scenario, 
-                           data_dir = processed_dir)
-  file_name <- get_file_name(analysis_scenario, scen_num)
-  file <- paste0(dir_name, "/", file_name)
+
+##
+# Workhorse
+##
+summarize_sim <- function(use_analysis_scenarios = analysis_scenarios(),
+                          use_datagen_scenarios = datagen_scenarios(),
+                          processed_dir = "./data/processed",
+                          summarised_dir = "./data/summarised"){
+  # summary will inculde all different analysis_scenarios times the different 
+  # datagen_scenarios
+  sim_scen_levels <- merge(use_analysis_scenarios, 
+                           use_datagen_scenarios, 
+                           by = NULL)
+  # init data.table for summary
+  summary <- init_summary(sim_scen_levels, 
+                          use_eval_param = eval_param())
+  # fill summary
+  fill_summary(summary,
+               use_analysis_scenarios = use_analysis_scenarios,
+               use_datagen_scenarios = use_datagen_scenarios)
+  # save summary
+  save_summary(summary, summarised_dir)
 }

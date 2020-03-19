@@ -42,9 +42,10 @@ source(file = "./rcode/sim/create_data_dirs.R")
 # formatted and saved to 150 files in 
 # .data/processed/size_valdata_10/method_complete_case
 process_one_analysis_scenario <- function(analysis_scenario, 
-                                          scen_nums,
+                                          use_datagen_scenarios,
                                           output_dir,
                                           processed_dir){
+  scen_nums <- use_datagen_scenarios[['scen_num']]
   files <- sapply(scen_nums, 
                   FUN = seek_output_file, 
                   analysis_scenario = analysis_scenario,
@@ -91,23 +92,24 @@ sqrt_var_beta <- function(datatable_sim_output){
 ##############################
 # 2 - Workhorse ----
 ##############################
-process_sim_output <- function(use_analysis_scenarios = analysis_scenarios(),
-                               scen_nums = 1:50,
+process_sim_output <- function(use_datagen_scenarios = datagen_scenarios(),
+                               use_analysis_scenarios = analysis_scenarios(),
                                output_dir = "./data/output",
                                processed_dir = "./data/processed"){
   # creates directories where .Rds filse will be saved
-  levels <- list("size_valdata" = 
-                   unique(analysis_scenarios()$size_valdata) * 100,
-                 "method" = 
-                   levels(analysis_scenarios()$method))
-  create_data_dirs(data_dir = paste0(processed_dir, "/"),
-                   levels = levels)
+  levels <- list(
+    "size_valdata" = 
+      unique(use_analysis_scenarios[['size_valdata']]) * 100,
+    "method" = 
+      unique(use_analysis_scenarios[['method']])
+  )
+  create_data_dirs(data_dir = processed_dir, levels = levels)
   # apply function process_one_analysis_scenario on all analysis_scenarios with
   # and datagen_scenarios scen_nums
   invisible(apply(use_analysis_scenarios,
             1,
             FUN = process_one_analysis_scenario,
-            scen_nums = scen_nums,
+            use_datagen_scenarios = use_datagen_scenarios,
             output_dir = output_dir,
             processed_dir = processed_dir))
 }
