@@ -44,7 +44,7 @@ source(file = "./rcode/sim/create_data_dirs.R")
 # fe: ./data/output/size_valdata_10/method_random/
 get_dir_name <- function(analysis_scenario, 
                          data_dir){
-  size_valdata <- 100 * as.numeric(analysis_scenario['size_valdata'])
+  size_valdata <- 100 * as.numeric(analysis_scenario[['size_valdata']])
   method <- analysis_scenario[['method']]
   paste0(data_dir, 
          "/size_valdata_", 
@@ -61,6 +61,24 @@ get_file_name <- function(analysis_scenario, scen_num){
          "_",
          sampling_strat,
          ".Rds")
+}
+# seeks file of analysis_scenario for given datagen_scenario
+seek_file <- function(analysis_scenario, 
+                      datagen_scenario = NULL, 
+                      scen_num = NULL,
+                      data_dir){
+  # use datagen_scenario if given, else use scen_num
+  if(!is.null(datagen_scenario)){
+    scen_num <- datagen_scenario[['scen_num']]
+  }
+  if(is.null(scen_num) & is.null(datagen_scenario)){
+    stop("scen_num and datagen_scenario are both NULL")
+  }
+  dir_name <- get_dir_name(analysis_scenario, 
+                           data_dir = data_dir)
+  file_name <- get_file_name(analysis_scenario, scen_num)
+  file <- paste0(dir_name, "/", file_name)
+  file
 }
 # save the output in dir_name/file_name
 save_result <- function(result){
@@ -170,9 +188,9 @@ run_sim <- function(rep = 5000,
   # levels of data_dirs (see the described structure above)
   levels <- list(
     "size_valdata" = 
-      unique(use_analysis_scenarios$size_valdata) * 100,
+      unique(use_analysis_scenarios[['size_valdata']]) * 100,
     "method" = 
-      unique(use_analysis_scenarios$method)
+      unique(use_analysis_scenarios[['method']])
   )
   create_data_dirs(levels = levels)
   invisible(apply(use_datagen_scenarios, 

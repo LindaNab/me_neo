@@ -22,17 +22,19 @@ create_dir <- function(name){
 # format path of directory of levels
 format_dir_path <- function(data_dir, prefix_dir, dir_name){
   char <- as.vector(sapply(data_dir, 
-                           function(x) paste0(x, prefix_dir, "_", dir_name),
-                           USE.NAMES = F))
+                           function(x) paste0(x, 
+                                              "/", prefix_dir, "_", dir_name)
+                           )
+                    )
 }
 ##############################
 # 2 - Create directories in data_dir directory (fe: ./data/output)
 ##############################
-create_data_dirs <- function(data_dir = "./data/output/", levels){
+create_data_dirs <- function(data_dir = "./data/output", levels){
   dir_paths <- list_data_dirs(data_dir, levels)
   invisible(sapply(unlist(dir_paths), create_dir))
 }
-list_data_dirs <- function(data_dir = "./data/output/", levels){
+list_data_dirs <- function(data_dir = "./data/output", levels){
   dir_paths <- vector("list", length(levels))
   for (i in 1:length(levels)){
     dir_paths[[i]] <- format_dir_path(
@@ -40,7 +42,7 @@ list_data_dirs <- function(data_dir = "./data/output/", levels){
       prefix_dir = names(levels)[i],
       dir_name = levels[[i]]
     )
-    data_dir <- paste0(dir_paths[[i]], "/")
+    data_dir <- paste0(dir_paths[[i]])
   }
   dir_paths
 }
