@@ -22,6 +22,6 @@ use_analysis_scenarios <- analysis_scenarios()
 
 # not run
 # run_sim()
-run_sim(rep = 5000, 
+run_sim(rep = 500, 
         use_datagen_scenarios = use_datagen_scenarios, 
         use_analysis_scenarios = use_analysis_scenarios)
