@@ -18,10 +18,10 @@ jobs:
           Rscript -e "source('rcode/testjob.R')"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v2
-        branch: patch
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           committer: Linda Nab <LindaNab@users.noreply.github.com>
+        branch: patch
       #- name: Commit results
         #run: |
           #git add "./data/helloworld.Rds"
