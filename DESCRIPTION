@@ -1,0 +1,16 @@
+Package: me_neo
+Title: Simulation study me_neo
+Version: 0.0.1
+Authors@R: 
+    person(given = "Linda",
+           family = "Nab",
+           role = c("aut", "cre"),
+           email = "lindanab4@gmail.com")
+Description: Run simulation study
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+Imports: 
+URL: https://github.com/lindanab/me_neo
+BugReports: https://github.com/lindanab/me_neo/issues
