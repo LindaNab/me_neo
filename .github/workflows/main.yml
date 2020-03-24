@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           committer: Linda Nab <LindaNab@users.noreply.github.com>
-        branch: patch
+          branch: patch
       #- name: Commit results
         #run: |
           #git add "./data/helloworld.Rds"
