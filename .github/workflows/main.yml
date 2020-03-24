@@ -7,22 +7,22 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@v1
       #- name: Install Package Dependencies
         #run: |-
           #Rscript -e "install.packages('remotes')"
           #Rscript -e "remotes::install_deps(dependencies = TRUE)"
       - name: Greet world
-        #env:
-          #EPIBOT_ACCESS_SECRET: ${{ secrets.STATSBOT_ACCESS_SECRET }}
-          #EPIBOT_ACCESS_TOKEN: ${{ secrets.STATSBOT_ACCESS_TOKEN }}
-          #EPIBOT_CONSUMER_KEY: ${{ secrets.STATSBOT_CONSUMER_KEY }}
-          #EPIBOT_CONSUMER_SECRET: ${{ secrets.STATSBOT_CONSUMER_SECRET }}
         run: |-
           Rscript -e "source('rcode/testjob.R')"
-      - name: Commit results
-        run: |
-          git add "./data/helloworld.Rds"
-          git commit -m "Update data" -a || echo "No changes to commit"
-          git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          committer: Linda Nab <LindaNab@users.noreply.github.com>
+      #- name: Commit results
+        #run: |
+          #git add "./data/helloworld.Rds"
+          #git commit -m "Update data" -a || echo "No changes to commit"
+          #git push #https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"
