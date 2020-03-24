@@ -20,7 +20,7 @@ jobs:
           #EPIBOT_CONSUMER_KEY: ${{ secrets.STATSBOT_CONSUMER_KEY }}
           #EPIBOT_CONSUMER_SECRET: ${{ secrets.STATSBOT_CONSUMER_SECRET }}
         run: |-
-          Rscript -e "source('./rcode/testjob.R')"
+          Rscript -e "source('rcode/testjob.R')"
       - name: Commit results
         run: |
           git commit -m "Update data" -a || echo "No changes to commit"
