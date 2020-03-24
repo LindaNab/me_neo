@@ -15,7 +15,7 @@ jobs:
           #Rscript -e "remotes::install_deps(dependencies = TRUE)"
       - name: Run simulation study datagen_scen#1
         run: |-
-          Rscript -e "source('rcode/testjob.R')"
+          Rscript -e "source('rcode/testjob.R')" 3 5000
       #- name: Create report file
         #run: date +%s > report.txt
       - name: Create Pull Request
