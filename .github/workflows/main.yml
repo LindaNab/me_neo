@@ -24,6 +24,6 @@ jobs:
         uses: peter-evans/create-pull-request@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Add sim output simulation study datagen_scen#1
+          commit-message: Add sim output simulation study datagen_scen scen_num ${{ matrix.scen_num }}
           committer: Linda Nab <LindaNab@users.noreply.github.com>
           branch: patch${{ matrix.scen_num }}

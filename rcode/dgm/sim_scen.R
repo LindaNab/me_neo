@@ -43,7 +43,6 @@ datagen_scenarios <- function(){
                                    taus, 
                                    heteroscedastic)
   datagen_scenarios$scen_num <- c(1:NROW(datagen_scenarios))
-  #colnames(temp) <- c("skewness", "lambda")
   colnames(datagen_scenarios) <- c("lambda", 
                                    "tau", 
                                    "heteroscedastic",
@@ -55,9 +54,23 @@ datagen_scenarios <- function(){
   skew_lambda_pairs <- cbind(skewness, lambdas)
   datagen_scenarios <- merge(datagen_scenarios, skew_lambda_pairs,
                              by.x = 'lambda', by.y = 'lambdas')
+  # Use orderning according to scen_num
   datagen_scenarios <- datagen_scenarios[order(datagen_scenarios$scen_num),]
+  # Add S0
+  datagen_scenarios <- rbind(datagen_scenarios_S0(),
+                             datagen_scenarios)
   return(datagen_scenarios)}
 
+datagen_scenarios_S0 <- function(){
+  R_squared = 1
+  skewness = 0.1
+  S0 <- c(lambda = calc_lambda(skewness),
+          tau = calc_tau(R_squared),
+          heteroscedastic = 0,
+          scen_num = 0,
+          R_squared = R_squared,
+          skewness = skewness)
+}
 ############################## 
 # 3 - Function that creates data.frame with 50 scenarios, differently analysing
 # the data 
@@ -79,3 +92,4 @@ analysis_scenarios <- function(){
                                    "method",
                                    "size_valdata")
   return(analyse_scenarios)}
+
