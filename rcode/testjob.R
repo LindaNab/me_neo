@@ -21,7 +21,7 @@ args <- as.numeric(args)
 # Select datagen_scenarios and analysis_scenarios to be used
 #use_datagen_scenarios <- datagen_scenarios()[16,]
 #use_analysis_scenarios <- analysis_scenarios()[c(46, 52),]
-use_datagen_scenarios <- datagen_scenarios()[args[1],]
+use_datagen_scenarios <- datagen_scenarios()[args[1] + 1,] # row 1 is scen_num 0
 use_analysis_scenarios <- analysis_scenarios()
 #
 # # not run

@@ -169,7 +169,7 @@ sim_one_datagen_scenario <- function(datagen_scenario,
   scen_num <- as.numeric(datagen_scenario['scen_num'])
   for(i in 1:rep){
     perform_one_run(seed = seeds[(rep * scen_num + i)], # for now, seed for 
-                    # each datagen_scenario() is: S1: 1 - 5000, S2: 5001 - 10000
+                    # each datagen_scenario() is: S0: 1 - 5000, S1: 5001 - 10000
                     # etc. if rep = 5000
                     datagen_scenario = datagen_scenario,
                     use_analysis_scenarios = use_analysis_scenarios,
@@ -185,6 +185,7 @@ run_sim <- function(rep = 5000,
                     use_analysis_scenarios = analysis_scenarios(),
                     seeds = get_seeds(rep),
                     output_dir = "./data/output"){
+  print(seeds)
   # levels of data_dirs (see the described structure above)
   levels <- list(
     "size_valdata" = 
