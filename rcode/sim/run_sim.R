@@ -183,7 +183,7 @@ sim_one_datagen_scenario <- function(datagen_scenario,
 run_sim <- function(rep = 5000, 
                     use_datagen_scenarios = datagen_scenarios(),
                     use_analysis_scenarios = analysis_scenarios(),
-                    seed = get_seed(),
+                    seed = get_seed(rep),
                     output_dir = "./data/output"){
   # levels of data_dirs (see the described structure above)
   levels <- list(
