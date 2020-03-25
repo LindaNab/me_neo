@@ -11,8 +11,8 @@
 ##############################
 source(file = "./rcode/sim/run_sim.R")
 args <- commandArgs(trailingOnly = TRUE)
-#args <- c(3, 6000)
-print(args)
+# transform to integers
+args <- as.numeric(args)
 
 ##############################
 # 1 - Run simulation study 
