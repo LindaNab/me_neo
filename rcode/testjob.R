@@ -10,6 +10,7 @@
 # 0 - Load librairies + source code 
 ##############################
 source(file = "./rcode/sim/run_sim.R")
+args <- commandArgs(trailingOnly = TRUE)
 
 ##############################
 # 1 - Run simulation study 
@@ -17,11 +18,11 @@ source(file = "./rcode/sim/run_sim.R")
 # Select datagen_scenarios and analysis_scenarios to be used
 #use_datagen_scenarios <- datagen_scenarios()[16,]
 #use_analysis_scenarios <- analysis_scenarios()[c(46, 52),]
-use_datagen_scenarios <- datagen_scenarios()[2,]
+use_datagen_scenarios <- datagen_scenarios()[args[1],]
 use_analysis_scenarios <- analysis_scenarios()
 
 # not run
 # run_sim()
-run_sim(rep = 5000, 
+run_sim(rep = args[2], 
         use_datagen_scenarios = use_datagen_scenarios, 
         use_analysis_scenarios = use_analysis_scenarios)
