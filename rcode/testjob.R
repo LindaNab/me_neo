@@ -11,6 +11,7 @@
 ##############################
 source(file = "./rcode/sim/run_sim.R")
 args <- commandArgs(trailingOnly = TRUE)
+args <- as.numeric(args)
 # args <- scan(args[1])
 # print(input_from_file)
 
