@@ -2,13 +2,16 @@ name: Run simulation study for one datagen_scen
 on: 
   push:
     paths:
-    - ".github/workflows/input.txt"
+    - ".github/workflows/input_one_datagen_scen.txt"
 #  schedule:
 #    - cron:  '0 * * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scen_num: [0 1]
     steps:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@v1
@@ -16,11 +19,9 @@ jobs:
         #run: |-
           #Rscript -e "install.packages('remotes')"
           #Rscript -e "remotes::install_deps(dependencies = TRUE)"
-      - name: Run simulation study datagen_scen#1
+      - name: Run simulation study one datagen_scen
         run: |-
-          Rscript -e "source('rcode/testjob.R')" input.txt
-      #- name: Create report file
-       # run: date +%s > report.txt
+          Rscript rcode/testjob.R .github/workflows/input_one_datagen_scen.txt ${{ matrix.scen_num }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v2
         with:
@@ -28,8 +29,3 @@ jobs:
           commit-message: Add sim output simulation study datagen_scen#1
           committer: Linda Nab <LindaNab@users.noreply.github.com>
           branch: patch
-      #- name: Commit results
-        #run: |
-          #git add "./data/helloworld.Rds"
-          #git commit -m "Update data" -a || echo "No changes to commit"
-          #git push #https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"
