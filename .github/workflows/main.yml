@@ -1,5 +1,7 @@
-name: Test job
+name: Run simulation study for one datagen_scen
 on: push
+  paths:
+    - .github/workflow/input.txt
 #  schedule:
 #    - cron:  '0 * * * *'
 
@@ -15,9 +17,9 @@ jobs:
           #Rscript -e "remotes::install_deps(dependencies = TRUE)"
       - name: Run simulation study datagen_scen#1
         run: |-
-          Rscript -e "source('rcode/testjob.R')" 3 5000
+          Rscript -e "source('rcode/testjob.R')" input.txt
       #- name: Create report file
-        #run: date +%s > report.txt
+       # run: date +%s > report.txt
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v2
         with:
