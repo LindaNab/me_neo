@@ -1,7 +1,7 @@
 name: Run simulation study for one datagen_scen
 on: push
   paths:
-    - ".github/workflow/input.txt"
+    - ".github/workflows/input.txt"
 #  schedule:
 #    - cron:  '0 * * * *'
 
