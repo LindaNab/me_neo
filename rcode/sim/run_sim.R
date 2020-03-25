@@ -110,9 +110,9 @@ save_result <- function(result){
 ##############################
 # 2 - Seed ---
 ##############################
-get_seed <- function(rep = 5000){
+get_seeds <- function(rep){
   set.seed(20200305)
-  n_seed <- NROW(datagen_scenarios()) * rep # 50 datagen_scenarios() 
+  n_seed <- NROW(datagen_scenarios()) * rep # 51 datagen_scenarios() 
                                             # and 5000 replications per scenario
   seed <- sample(1:1e8, 
                  size = n_seed, 
@@ -163,12 +163,12 @@ perform_one_run <- function(seed,
 # datagen_scenarios(): S1-S50). FE: for S1 of datagen_scenarios()
 sim_one_datagen_scenario <- function(datagen_scenario,
                                      use_analysis_scenarios,
-                                     rep = 5000,
-                                     seed,
+                                     rep,
+                                     seeds,
                                      output_dir){
   scen_num <- as.numeric(datagen_scenario['scen_num'])
   for(i in 1:rep){
-    perform_one_run(seed = seed[(rep * (scen_num - 1) + i)], # for now, seed for 
+    perform_one_run(seed = seeds[(rep * scen_num + i)], # for now, seed for 
                     # each datagen_scenario() is: S1: 1 - 5000, S2: 5001 - 10000
                     # etc. if rep = 5000
                     datagen_scenario = datagen_scenario,
@@ -183,7 +183,7 @@ sim_one_datagen_scenario <- function(datagen_scenario,
 run_sim <- function(rep = 5000, 
                     use_datagen_scenarios = datagen_scenarios(),
                     use_analysis_scenarios = analysis_scenarios(),
-                    seed = get_seed(rep),
+                    seeds = get_seeds(rep),
                     output_dir = "./data/output"){
   # levels of data_dirs (see the described structure above)
   levels <- list(
@@ -198,6 +198,6 @@ run_sim <- function(rep = 5000,
                   FUN = sim_one_datagen_scenario, 
                   use_analysis_scenarios = use_analysis_scenarios,
                   rep = rep,
-                  seed = seed,
+                  seeds = seeds,
                   output_dir = output_dir))
 }
