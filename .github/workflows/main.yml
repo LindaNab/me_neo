@@ -11,10 +11,10 @@ jobs:
       matrix:
         scen_num: [0, 21, 25]
     steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v2
       - name: Run simulation study for scen_num ${{ matrix.scen_num }}
       - id: sim
-      - uses: actions/checkout@v2
-      - uses: r-lib/actions/setup-r@v1
         run: |-
           Rscript rcode/testjob.R ${{ matrix.scen_num }} 5
       - uses: actions/upload-artifact@v1
