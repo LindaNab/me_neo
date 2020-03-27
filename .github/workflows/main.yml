@@ -20,11 +20,8 @@ jobs:
         with:
           name: data-output-S${{ matrix.scen_num }}
           path: data/output
-      - name: Set status
-        id: set_status
-        run: echo ::set-output name=status::success
   pullRequest:
-    if: steps.set_status.outputs.status == 'success'
+    needs: [run_sim]
     runs-on: ubuntu-latest
     strategy:
       matrix:
