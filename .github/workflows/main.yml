@@ -21,6 +21,7 @@ jobs:
           name: data-output-S${{ matrix.scen_num }}
           path: data/output
   pullRequest:
+  if: job.status.run_sim == 'success'
     runs-on: ubuntu-latest
     strategy:
       matrix:
