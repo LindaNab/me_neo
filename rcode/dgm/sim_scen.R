@@ -42,15 +42,20 @@ datagen_scenarios <- function(){
   datagen_scenarios <- expand.grid(lambdas, 
                                    taus, 
                                    heteroscedastic)
+  # Add theta (theta = 0.16 in scenarios 1-50 but theta = 1 in scenario 0)
+  datagen_scenarios$theta <- 0.16
+  # Add scenarios nums
   datagen_scenarios$scen_num <- c(1:NROW(datagen_scenarios))
   colnames(datagen_scenarios) <- c("lambda", 
                                    "tau", 
                                    "heteroscedastic",
+                                   "theta",
                                    "scen_num")
-  # add corresponding R_squared and taus (convenient for results)
+  # add corresponding R_squared to taus (convenient for results)
   R_squared_tau_pairs <- cbind(R_squared, taus)
   datagen_scenarios <- merge(datagen_scenarios, R_squared_tau_pairs, 
                              by.x = 'tau', by.y = 'taus')
+  # add corresponding skewness to lambdas (convenient for results)
   skew_lambda_pairs <- cbind(skewness, lambdas)
   datagen_scenarios <- merge(datagen_scenarios, skew_lambda_pairs,
                              by.x = 'lambda', by.y = 'lambdas')
@@ -67,6 +72,7 @@ datagen_scenarios_S0 <- function(){
   S0 <- c(lambda = calc_lambda(skewness),
           tau = calc_tau(R_squared),
           heteroscedastic = 0,
+          theta = 1,
           scen_num = 0,
           R_squared = R_squared,
           skewness = skewness)

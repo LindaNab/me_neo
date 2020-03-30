@@ -131,6 +131,7 @@ perform_one_run <- function(seed,
                             output_dir){
   # generate data
   data <- gen_data(lambda = datagen_scenario[['lambda']],
+                   theta = datagen_scenario[['theta']],
                    tau = datagen_scenario[['tau']],
                    heteroscedastic = datagen_scenario[['heteroscedastic']],
                    seed = seed)
