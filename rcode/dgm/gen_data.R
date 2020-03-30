@@ -16,7 +16,7 @@
 gen_data <- function(nobs = 650, 
                      k = 6.1, 
                      lambda, 
-                     theta = 0.16, 
+                     theta, 
                      tau, 
                      beta = 0.01, 
                      sigma = 0.57,
