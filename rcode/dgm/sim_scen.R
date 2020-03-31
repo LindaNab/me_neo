@@ -9,6 +9,7 @@
 ##############################
 # 0 - Load librairies ----
 ##############################
+source(file = "./rcode/dgm/gen_data.R")
 
 ############################## 
 # 1 - Helper Functions ----
@@ -16,9 +17,19 @@
 # by increasing tau, we add more measurement error
 # var_VAT = 2075, approximately the variance of VAT (estimated by generating a
 # data set of size 1e7)
-calc_tau <- function(R_squared, theta = 0.16, var_VAT = 2075){
+calc_tau <- function(R_squared, theta = 0.8){
+  # var_VAT <- calc_var_VAT()
+  var_VAT <- 1.219695 # hard-coded to make code more efficient
   tau_squared <- ((1 - R_squared) * theta^2 * var_VAT) / R_squared
   return(sqrt(tau_squared))
+}
+calc_var_VAT <- function(){
+  data <- gen_data(nobs = 1e7,
+                   lambda = 1, 
+                   theta = 1,
+                   tau = 0,
+                   seed = 20200331)
+  var(data$VAT)
 }
 # by changing lambda, we change the skewness of the data
 calc_lambda <- function(skewness, k = 6.1){
@@ -43,7 +54,7 @@ datagen_scenarios <- function(){
                                    taus, 
                                    heteroscedastic)
   # Add theta (theta = 0.16 in scenarios 1-50 but theta = 1 in scenario 0)
-  datagen_scenarios$theta <- 0.16
+  datagen_scenarios$theta <- 0.8
   # Add scenarios nums
   datagen_scenarios$scen_num <- c(1:NROW(datagen_scenarios))
   colnames(datagen_scenarios) <- c("lambda", 
@@ -70,7 +81,7 @@ datagen_scenarios_S0 <- function(){
   R_squared = 1
   skewness = 0.1
   S0 <- c(lambda = calc_lambda(skewness),
-          tau = calc_tau(R_squared),
+          tau = calc_tau(R_squared, theta = 1),
           heteroscedastic = 0,
           theta = 1,
           scen_num = 0,
@@ -99,3 +110,20 @@ analysis_scenarios <- function(){
                                    "size_valdata")
   return(analyse_scenarios)}
 
+############################## 
+# 4 - Script that checks R-squared
+############################## 
+# R-squared is correct for S0-S25. If error is heteroscedastic, tau is equal in 
+# those cases, but R_squared will be lower than desired (S26-S50)
+# datagen_scenario <- datagen_scenarios()[26,]
+# seed <- 20200330
+# # from run_sim
+# data <- gen_data(nobs <- 1e6, 
+#                  lambda = datagen_scenario[['lambda']],
+#                  theta = datagen_scenario[['theta']],
+#                  tau = datagen_scenario[['tau']],
+#                  heteroscedastic = datagen_scenario[['heteroscedastic']],
+#                  seed = seed)
+# # r_squared
+# fit <- lm(WC ~ VAT, data = data)
+# summary(fit)
