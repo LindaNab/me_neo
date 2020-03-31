@@ -8,10 +8,8 @@
 naive <- function(data){
   # using WC io VAT
   fit <- lm(IR_ln ~ WC + TBF + age + sex, 
-            data = data, 
-            na.action = na.omit)
-  sum_fit <- summary(fit)
-  beta <- sum_fit$coefficients["WC", "Estimate"]
-  var_beta <- sum_fit$coefficients["WC", "Std. Error"]^2
-  out <- c(beta = beta, var_beta = var_beta)
+            data = data)
+  beta <- fit$coefficients
+  vcov_beta <- vcov(fit)
+  out <- list(beta = beta, vcov = vcov_beta)
 }

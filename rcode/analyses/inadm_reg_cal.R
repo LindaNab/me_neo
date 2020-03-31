@@ -18,7 +18,7 @@ inadm_reg_cal <- function(data){
   # impute fitted values if VAT is missing
   data_imp$VAT[data$in_valdata == 1] <- VAT_fitted[data$in_valdata == 1]
   data_imp$in_valdata <- 1
-  # perfomr complete case analysis on imputed data
+  # perform complete case analysis on imputed data
   cc_fit <- complete_case(data_imp)
   out <- cc_fit
 }
