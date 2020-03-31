@@ -189,7 +189,6 @@ run_sim <- function(rep = 5000,
                     use_analysis_scenarios = analysis_scenarios(),
                     seeds = get_seeds(rep),
                     output_dir = "./data/output"){
-  print(seeds)
   # levels of data_dirs (see the described structure above)
   levels <- list(
     "size_valdata" = 
