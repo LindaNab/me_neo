@@ -59,3 +59,10 @@ analyse_data <- function(analysis_scenario,
               "n_valdata" = NROW(data[data$in_valdata == 1,]))
   result
 }
+# calc explained variance measurement error model
+get_R_squared <- function(data){
+  fit <- lm(WC ~ VAT, data = data)
+  sum_fit <- summary(fit)
+  R_squared <- summary(fit)$r.squared
+  R_squared
+}

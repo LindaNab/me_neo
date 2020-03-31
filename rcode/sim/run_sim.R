@@ -85,6 +85,7 @@ save_result <- function(result){
   beta <- as.numeric(result['beta'])
   var_beta <- as.numeric(result['var_beta'])
   n_valdata <- as.numeric(result['n_valdata'])
+  R_squared <- as.numeric(result['R_squared'])
   seed <- as.numeric(result['seed'])
   dir_name <- result[['dir_name']]
   file_name <- result[['file_name']]
@@ -97,12 +98,13 @@ save_result <- function(result){
     }
     open(con)
     results_in_file <- readRDS(file)
-    new_results <- rbind(results_in_file, c(beta, var_beta, n_valdata, seed))
+    new_results <- rbind(results_in_file, 
+                         c(beta, var_beta, n_valdata, R_squared, seed))
     rownames(new_results) <- NULL
     saveRDS(new_results, file = file)
     close(con)
     } else{ #create new file
-  saveRDS(c(beta, var_beta, n_valdata, seed), file = file)}
+  saveRDS(c(beta, var_beta, n_valdata, R_squared, seed), file = file)}
   message <- paste0(file, " saved!")
   print(message)
 }
@@ -154,10 +156,11 @@ perform_one_run <- function(seed,
                                    )))
   colnames(results) <- c("beta", 
                          "var_beta",
-                         "n_valdata", 
+                         "n_valdata",
                          "seed", 
                          "dir_name", # directory were results will be saved
                          "file_name") # name of the .Rds file
+  results <- cbind(results, "R_squared" = get_R_squared(data))
   apply(results, 1, save_result)
 }
 # Repeat 'perform_one_run' rep times, for one specific datagen_scenario (see 
