@@ -37,17 +37,19 @@ get_result <- function(data,
   else if (method == "inadm_reg_cal"){
     result <- inadm_reg_cal(data)
   }
-  result
+  out <- c(beta = result$beta[[2]], 
+           var_beta = result$vcov[2,2])
+  out
 }
 
 ############################## 
 # 2 - Work horse that samples data and pulls the result
 ##############################
-analyse_data <- function(analyse_scenario, 
+analyse_data <- function(analysis_scenario, 
                          data){
-  size_valdata <- as.numeric(analyse_scenario['size_valdata'])
-  sampling_strat <- analyse_scenario['sampling_strat']
-  method <- analyse_scenario['method']
+  size_valdata <- as.numeric(analysis_scenario[['size_valdata']])
+  sampling_strat <- analysis_scenario[['sampling_strat']]
+  method <- analysis_scenario[['method']]
   data <- select_valdata(data = data, 
                          size_valdata = size_valdata, 
                          use_variable = "WC",

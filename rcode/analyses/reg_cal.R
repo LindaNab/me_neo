@@ -18,7 +18,7 @@ reg_cal <- function(data){
   cal_mod <- lm(VAT ~ WC + TBF + age + sex,
                 data = subset(data, in_valdata == 1))
   beta <- correct_beta_star(beta_star, cal_mod)
-  vcov_beta <- get_vcov_beta(beta_star, cal_mod)
+  vcov_beta <- get_vcov_beta(naive_fit, cal_mod)
   # output is a list with the corrected coef (beta) and its variance
   out <- list(beta = beta, vcov = vcov_beta)
 }
@@ -37,7 +37,8 @@ correct_beta_star <- function(beta_star, cal_mod){
   beta
 }
 # estimate vcov matrix using delta method
-get_vcov_beta <- function(beta_star, cal_mod){
+get_vcov_beta <- function(naive_fit, cal_mod){
+  beta_star <- naive_fit$beta
   # Step 2. covariance matrix of the corrected beta
   # take vec = (c(beta_star), c(cal_mat))
   # = (c(beta_star), lambda_1, 0, 0, ...)
