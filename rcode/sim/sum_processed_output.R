@@ -42,10 +42,10 @@ source(file = "./rcode/sim/run_sim.R")
 # n_sim can get _mcse
 # n_valdata is the only param that not from simsum
 # To do 2: add notes
-
 eval_param <- function(){
   eval_param <- c("bias", 
-                  "bias_mcse", 
+                  "bias_mcse",
+                  "perc_bias",
                   "mse", 
                   "mse_mcse",
                   "cover",
@@ -101,6 +101,7 @@ fill_one_row_of_summary <- function(summary,
     fill_row_with_stat(row_num, summary, simsum, stats[i])
   }
   summary[row_num, n_valdata := mean(processed_output$size_valdata)]
+  summary[row_num, perc_bias := (summary[row_num, bias] / 0.01) * 100]
   simsum_table <- get_data(simsum)
   summary[row_num, n_sim := simsum_table[simsum_table$stat == "nsim",]$est]
   print(paste0(file, " summarized!"))
