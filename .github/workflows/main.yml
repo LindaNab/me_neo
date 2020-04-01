@@ -36,8 +36,16 @@ jobs:
         with:
           name: data-output-S${{ matrix.scen_num }}
           path: data/output
+       - uses: peterjgrainger/action-create-branch@v1.0.0
+         env: 
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         with:
+           branch: patch_S${{ matrix.scen_num }}
       - name: Create branch and push data
         run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git checkout patch_S${{ matrix.scen_num }}
           git commit -m "Update data" -a || echo "No changes to commit"
           git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"
 #      - name: Create Pull Request
