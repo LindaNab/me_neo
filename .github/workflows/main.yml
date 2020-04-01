@@ -38,7 +38,7 @@ jobs:
           path: data/output
       - name: Create branch and push data
         run: |
-          git add .data/output/*
+          git add ./data/output/*
           git commit -m "Update data" -a || echo "No changes to commit"
           git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"
 #      - name: Create Pull Request
