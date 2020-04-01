@@ -36,11 +36,11 @@ jobs:
         with:
           name: data-output-S${{ matrix.scen_num }}
           path: data/output
-       - uses: peterjgrainger/action-create-branch@v1.0.0
-         env: 
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-         with:
-           branch: patch_S${{ matrix.scen_num }}
+      - uses: peterjgrainger/action-create-branch@v1.0.0
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: patch_S${{ matrix.scen_num }}
       - name: Create branch and push data
         run: |
           git config --local user.email "action@github.com"
