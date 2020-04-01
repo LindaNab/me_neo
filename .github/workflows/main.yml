@@ -32,10 +32,6 @@ jobs:
         scen_num: [0, 1]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v1
-        with:
-          name: data-output-S${{ matrix.scen_num }}
-          path: data/output
       - uses: peterjgrainger/action-create-branch@v1.0.0
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -43,7 +39,11 @@ jobs:
           branch: patch_S${{ matrix.scen_num }}
       - uses: actions/checkout@v2
         with:
-          ref: patch_S${{ matrix.scen_num }}
+          ref: patch_S${{ matrix.scen_num }}   
+      - uses: actions/download-artifact@v1
+        with:
+          name: data-output-S${{ matrix.scen_num }}
+          path: data/output
       - name: Add, commit and push changes to branch
         run: |
           git config --local user.email "action@github.com"
