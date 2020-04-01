@@ -74,6 +74,7 @@ process_and_save_Rds <- function(file,
   colnames(processed_sim_output) <- c('beta', 
                                       'var_beta', 
                                       'size_valdata', 
+                                      'R_squared',
                                       'seed')
   processed_sim_output <- sqrt_var_beta(processed_sim_output)
   processed_sim_output
