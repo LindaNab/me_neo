@@ -90,7 +90,7 @@ fill_one_row_of_summary <- function(summary,
   processed_output <- readRDS(file = file)
   simsum <- rsimsum::simsum(data = processed_output,
                             estvarname = "beta",
-                            true = 0.01,
+                            true = 0.2,
                             se = "se_beta")
   sim_scen <- cbind(datagen_scenario, analysis_scenario)
   sim_scen <- data.table(sim_scen)
@@ -101,7 +101,7 @@ fill_one_row_of_summary <- function(summary,
     fill_row_with_stat(row_num, summary, simsum, stats[i])
   }
   summary[row_num, n_valdata := mean(processed_output$size_valdata)]
-  summary[row_num, perc_bias := (summary[row_num, bias] / 0.01) * 100]
+  summary[row_num, perc_bias := (summary[row_num, bias] / 0.2) * 100]
   simsum_table <- get_data(simsum)
   summary[row_num, n_sim := simsum_table[simsum_table$stat == "nsim",]$est]
   print(paste0(file, " summarized!"))
