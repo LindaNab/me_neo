@@ -1,12 +1,20 @@
-# measerror-msm
+# The me_neo repository
 
 ## Version 0.1.0
-Code of the simulation study from the manuscript 'Internal validation data sampling strategies for exposure measurement error correction:  a study of visceral adipose tissue measurements replaced by waist circumference measurements' by Linda Nab et al.
+This repository contains the code and simulation output of the simulation study accompanying the manuscript 'Internal validation data sampling strategies for exposure measurement error correction:  a study of visceral adipose tissue measurements replaced by waist circumference measurements' by Linda Nab et al.
 
 ## Running simulation study
-This simulation study is ran with use of [GitHub Actions](https://github.com/features/actions). A particular (series of) job(s) can be executed by using main.yml available in the directory .github/workflows. The YAML is used to run the R script execute_simstudy.R in the directory rcode using the arguments scen_num and rep. After the job has run, a new branch is created named patch_Sscen_num. This new branch contains the simulation output for that particular simulation scenario. 
+This simulation study is ran with use of [GitHub Actions](https://github.com/features/actions). A particular (series of) job(s) can be executed by using main.yml available in the directory .github/workflows. The YAML is used to run the R script execute_simstudy.R, available in the directory rcode, and uses the arguments scen_num and rep. After the job has run, a new branch is created named patch_Sscen_num. This newly created branch contains the simulation output for that particular simulation scenario.
 
-The simulation output where the results of the paper are based on is available in the directory data/output. 
+The simulation output on which the results of the paper are based is available in the directory data/output. 
+
+## Simulation scenarios
+The simulation study is based on 41 different data generating mechanisms, referred to as S0-S40 (scen_num). The data generating mechanisms vary: the explained variance of the measurement error model (R_squared/tau); the skewness of the residual errors of the model for visceral adipose tissue given sex, age and total body fat (skewness/lambda); whether the measurement errors are heteroscedastic or not (heteroscedastic). These different data generating mechanisms are defined by the function datagen_scenarios() available in rcode/dgm/sim_scen.R. For each of these 41 data generating mechanisms, 5000 data sets were generated.
+
+Each one of these data sets were analysed using 60 different analyses. The analysis scenarios vary: how the data in the validation sample is sampled (sampling_strat); which (measurement error correction) is applied (method); the percentage of individuals in the validation sample (size_valdata). These different analysis scenarios are defined by the function analysis_scenarios() available in rcode/dgm/sim_scen.R.
+
+The name of the output files (in data/output) of the simulation study are contructed as follows:
+size_valdata_(size_valdata*100)/method_(method)/(scen_num)_(sampling_strat).Rds
 
 ## Processing results of simulation study (under construction)
 The R code in ./src/tabular creates tables with the results of the simulation study. The table that is produced by the script can be used in LaTeX files. The script uses the .rds files available in ./data/processed. The output of the script is saved in .results/tables.
