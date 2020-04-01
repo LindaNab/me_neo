@@ -11,6 +11,6 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-Imports: 
+Imports: numDeriv
 URL: https://github.com/lindanab/me_neo
 BugReports: https://github.com/lindanab/me_neo/issues
