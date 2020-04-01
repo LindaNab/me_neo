@@ -3,8 +3,10 @@
 ## Version 0.1.0
 Code of the simulation study from the manuscript 'Internal validation data sampling strategies for exposure measurement error correction:  a study of visceral adipose tissue measurements replaced by waist circumference measurements' by Linda Nab et al.
 
-## Generating data and running simulation study
-The R script 1_exe.R in ./rcode can be used to execute the sim study. Data will be saved in ./data/output.
+## Running simulation study
+This simulation study is ran with use of [GitHub Actions](https://github.com/features/actions). A particular (series of) job(s) can be executed by using main.yml available in the directory .github/workflows. The YAML is used to run the R script execute_simstudy.R in the directory rcode using the arguments scen_num and rep. After the job has run, a new branch is created named patch_Sscen_num. This new branch contains the simulation output for that particular simulation scenario. 
+
+The simulation output where the results of the paper are based on is available in the directory data/output. 
 
 ## Processing results of simulation study (under construction)
 The R code in ./src/tabular creates tables with the results of the simulation study. The table that is produced by the script can be used in LaTeX files. The script uses the .rds files available in ./data/processed. The output of the script is saved in .results/tables.
@@ -32,8 +34,9 @@ With attached packages:
 ├── README.md
 ├── config             <- Configuration files
 ├── data
-│   ├── summarised     <- summaries of the output
-│   └── output         <- The original, generated data files that were analysed
+│   ├── output         <- The original results of each run
+│   └── processed      <- The processed output of each run
+│   └── summarised     <- Summaries of the processed data
 ├── docs               <- Documentation notebook for users (HW)
 │   ├── manuscript     <- Manuscript source, e.g., LaTeX, Markdown, etc. (HW)
 │   └── reports        <- Other project reports and notebooks (e.g. Jupyter, .Rmd) (HW)
