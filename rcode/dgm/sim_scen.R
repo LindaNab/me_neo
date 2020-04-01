@@ -43,7 +43,7 @@ calc_lambda <- function(skewness, k = 6.1){
 #     not (1 or 0, respectively)
 ##############################
 datagen_scenarios <- function(){
-  skewness <- c(0.1, 1, 2, 4, 6)
+  skewness <- c(0.1, 1, 1.5, 3)
   lambdas <- sapply(skewness, calc_lambda)
   R_squared <- c(0.2, 0.4, 0.6, 0.8, 0.9)
   taus <- sapply(R_squared, calc_tau)
