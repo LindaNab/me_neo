@@ -42,68 +42,85 @@ source(file = "./rcode/sim/run_sim.R")
 # n_sim can get _mcse
 # n_valdata is the only param that not from simsum
 # To do 2: add notes
-eval_param <- function(){
-  eval_param <- c("bias", 
-                  "bias_mcse",
-                  "perc_bias",
-                  "mse", 
-                  "mse_mcse",
-                  "cover",
-                  "cover_mcse", 
-                  "modelse",
-                  "modelse_mcse", 
-                  "empse",
-                  "empse_mcse",
-                  "n_valdata",
-                  "n_sim")
+
+##############################
+# 1 - Evaluation params of sim study
+##############################
+# The simulation evaluation parameters of the sim study, obtained using the 
+# rsimsum package
+eval_param_rsimsum <- function(){
+  eval_param_rsimsum <- c("bias",
+                          "mse",
+                          "cover",
+                          "modelse", 
+                          "empse",
+                          "nsim")
+  eval_param_rsimsum <- c(rbind(eval_param_rsimsum, 
+                          paste0(eval_param_rsimsum, "_mcse")))
+  eval_param_rsimsum
 }
+# The simulation evaluation parameters not obtained from the rsimsum package 
+# (but by user defined functions in fill_one_row_with_eval_param())
+eval_param <- function(){
+  eval_param <- c("perc_bias",
+                  "R_squared_sim",
+                  "n_valdata")
+  eval_param
+}
+##############################
+# 2 - Helper functions to init, fill and save summary
+##############################
 # creates data.table that will be filled later on
-init_summary <- function(sim_scen_levels,
-                         use_eval_param){
+init_summary <- function(sim_scen_levels){
   size <- NROW(sim_scen_levels)
   out_datatable <- data.table(sim_scen_levels)
-  out_datatable[, (use_eval_param) := numeric(size)]
+  out_datatable[, (eval_param_rsimsum()) := numeric(size)]
+  out_datatable[, (eval_param()) := numeric(size)]
   out_datatable[]
 }
-save_summary <- function(summary, summarised_dir){
-  output_file <- paste0(summarised_dir, "/summary.Rds")
-  saveRDS(summary, file = output_file)
-}
+# fill the summary data.table for the used analysis_scenarios and 
+# datagen_scenarios, of which the processed output can be found in processed_dir
 fill_summary <- function(summary,
                          use_analysis_scenarios,
-                         use_datagen_scenarios){
+                         use_datagen_scenarios,
+                         processed_dir){
   for(j in 1:NROW(use_analysis_scenarios)){
     for(i in 1:NROW(use_datagen_scenarios)){
       fill_one_row_of_summary(summary,
                               analysis_scenario = use_analysis_scenarios[j,],
-                              datagen_scenario = use_datagen_scenarios[i,])
+                              datagen_scenario = use_datagen_scenarios[i,],
+                              processed_dir)
     }
   }
 }
-
+# Fills one row of the data.table summary of a specific analysis_scenario and
+# datagen_scenario
 fill_one_row_of_summary <- function(summary,
                                     analysis_scenario,
-                                    datagen_scenario){
+                                    datagen_scenario,
+                                    processed_dir){
   file <- seek_file(analysis_scenario, 
                     datagen_scenario, 
-                    data_dir = "./data/processed")
+                    data_dir = processed_dir)
   processed_output <- readRDS(file = file)
   simsum <- rsimsum::simsum(data = processed_output,
                             estvarname = "beta",
-                            true = 0.2,
+                            true = 0.2, # value of the estimand, see dgm
                             se = "se_beta")
+  # sim_scen will be used to select the correct row in summary that will be 
+  # filled
   sim_scen <- cbind(datagen_scenario, analysis_scenario)
   sim_scen <- data.table(sim_scen)
   # get row_number of this sim_scen in summary
   row_num <- summary[sim_scen, on = colnames(sim_scen), which = TRUE]
-  stats <- c("bias", "mse", "cover", "modelse", "empse")
+  # stats contains the params that will be pulled from the simsum object
+  stats <- eval_param_rsimsum()[- grep("_mcse", eval_param_rsimsum())]
+  # Loop trough all stats and fill the subsequent cells in summary
   for(i in 1:NROW(stats)){
     fill_row_with_stat(row_num, summary, simsum, stats[i])
   }
-  summary[row_num, n_valdata := mean(processed_output$size_valdata)]
-  summary[row_num, perc_bias := (summary[row_num, bias] / 0.2) * 100]
-  simsum_table <- get_data(simsum)
-  summary[row_num, n_sim := simsum_table[simsum_table$stat == "nsim",]$est]
+  # Fill the row with the params in eval_param()
+  fill_row_with_eval_param(row_num, summary, processed_output)
   print(paste0(file, " summarized!"))
   summary[]
 }
@@ -116,11 +133,23 @@ fill_row_with_stat <- function(row_num, summary, simsum, stat){
     summary[row_num, (stat) := est]
     summary[row_num, (stat_mcse) := mcse]}
   do.call(add_value, args)
+  summary[]
+}
+# A function for each of the params in eval_param() to fill the subsequent cell
+fill_row_with_eval_param <- function(row_num, summary, processed_output){
+  summary[row_num, n_valdata := mean(processed_output$size_valdata)]
+  summary[row_num, R_squared_sim := mean(processed_output$R_squared)]
+  # value of the estimand is 0.2, see dgm
+  summary[row_num, perc_bias := (summary[row_num, bias] / 0.2) * 100]
+}
+save_summary <- function(summary, summarised_dir){
+  output_file <- paste0(summarised_dir, "/summary.Rds")
+  saveRDS(summary, file = output_file)
 }
 
-##
-# Workhorse
-##
+##############################
+# 3 - Work horse ----
+##############################
 summarize_sim <- function(use_analysis_scenarios = analysis_scenarios(),
                           use_datagen_scenarios = datagen_scenarios(),
                           processed_dir = "./data/processed",
@@ -131,12 +160,12 @@ summarize_sim <- function(use_analysis_scenarios = analysis_scenarios(),
                            use_datagen_scenarios, 
                            by = NULL)
   # init data.table for summary
-  summary <- init_summary(sim_scen_levels, 
-                          use_eval_param = eval_param())
+  summary <- init_summary(sim_scen_levels)
   # fill summary
   fill_summary(summary,
                use_analysis_scenarios = use_analysis_scenarios,
-               use_datagen_scenarios = use_datagen_scenarios)
+               use_datagen_scenarios = use_datagen_scenarios,
+               processed_dir = processed_dir)
   # save summary
   save_summary(summary, summarised_dir)
 }
