@@ -35,51 +35,12 @@
 source(file = "./rcode/dgm/sim_scen.R")
 source(file = "./rcode/dgm/gen_data.R")
 source(file = "./rcode/analyses/analyse_data.R")
-source(file = "./rcode/sim/create_data_dirs.R")
+source(file = "./rcode/tools/create_data_dirs.R")
+source(file = "./rcode/tools/file_handling.R")
 
 ############################## 
 # 1 - Helper Functions ----
 ##############################
-# Gets the directory name where the output of one simulation run will be saved
-# fe: ./data/output/size_valdata_10/method_random/
-get_dir_name <- function(analysis_scenario, 
-                         data_dir){
-  size_valdata <- 100 * as.numeric(analysis_scenario[['size_valdata']])
-  method <- analysis_scenario[['method']]
-  paste0(data_dir, 
-         "/size_valdata_", 
-         size_valdata,
-         "/method_", 
-         method)
-}
-# Gets the name of the .Rds file where the ouput will be saved
-# fe: S1_random,.., S2_extremes etc
-get_file_name <- function(analysis_scenario, scen_num){
-  sampling_strat <- analysis_scenario[['sampling_strat']]
-  paste0("S",
-         scen_num,
-         "_",
-         sampling_strat,
-         ".Rds")
-}
-# seeks file of analysis_scenario for given datagen_scenario
-seek_file <- function(analysis_scenario, 
-                      datagen_scenario = NULL, 
-                      scen_num = NULL,
-                      data_dir){
-  # use datagen_scenario if given, else use scen_num
-  if(!is.null(datagen_scenario)){
-    scen_num <- datagen_scenario[['scen_num']]
-  }
-  if(is.null(scen_num) & is.null(datagen_scenario)){
-    stop("scen_num and datagen_scenario are both NULL")
-  }
-  dir_name <- get_dir_name(analysis_scenario, 
-                           data_dir = data_dir)
-  file_name <- get_file_name(analysis_scenario, scen_num)
-  file <- paste0(dir_name, "/", file_name)
-  file
-}
 # save the output in dir_name/file_name
 save_result <- function(result){
   beta <- as.numeric(result['beta'])
@@ -114,7 +75,7 @@ save_result <- function(result){
 ##############################
 get_seeds <- function(rep){
   set.seed(20200305)
-  n_seed <- NROW(datagen_scenarios()) * rep # 51 datagen_scenarios() 
+  n_seed <- NROW(datagen_scenarios()) * rep # 41 datagen_scenarios() 
                                             # and 5000 replications per scenario
   seed <- sample(1:1e8, 
                  size = n_seed, 
