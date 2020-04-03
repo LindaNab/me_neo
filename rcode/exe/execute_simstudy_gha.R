@@ -2,7 +2,7 @@
 ## Internal validation sampling strategies for exposure 
 ## measurement error correction
 ##
-## Executive script
+## Executive script that produces output of the simulation study
 ## lindanab4@gmail.com - 20200305
 #############################################################
 
@@ -19,13 +19,9 @@ args <- as.numeric(args)
 # 1 - Run simulation study 
 ##############################
 # Select datagen_scenarios and analysis_scenarios to be used
-#use_datagen_scenarios <- datagen_scenarios()[16,]
-#use_analysis_scenarios <- analysis_scenarios()[c(46, 52),]
 use_datagen_scenarios <- datagen_scenarios()[args[1] + 1,] # row 1 is scen_num 0
 use_analysis_scenarios <- analysis_scenarios()
-#
-# # not run
-# # run_sim()
+# Run simulation study
 run_sim(rep = args[2],
         use_datagen_scenarios = use_datagen_scenarios,
         use_analysis_scenarios = use_analysis_scenarios)

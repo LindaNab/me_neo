@@ -37,6 +37,7 @@
 library(data.table)
 library(rsimsum)
 source(file = "./rcode/sim/run_sim.R")
+source(file = "./rcode/tools/file_handling.R")
 
 # To do: change eval_param in without _mcse and add later on
 # n_sim can get _mcse

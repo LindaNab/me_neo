@@ -30,7 +30,8 @@
 library(data.table)
 source(file = "./rcode/dgm/sim_scen.R")
 source(file = "./rcode/sim/run_sim.R")
-source(file = "./rcode/sim/create_data_dirs.R")
+source(file = "./rcode/tools/create_data_dirs.R")
+source(file = "./rcode/tools/file_handling.R")
 
 ##############################
 # 1 - Helper functions ----
@@ -47,22 +48,14 @@ process_one_analysis_scenario <- function(analysis_scenario,
                                           processed_dir){
   scen_nums <- use_datagen_scenarios[['scen_num']]
   files <- sapply(scen_nums, 
-                  FUN = seek_output_file, 
+                  FUN = seek_file, 
                   analysis_scenario = analysis_scenario,
-                  output_dir = output_dir)
+                  datagen_scenario = NULL,
+                  data_dir = output_dir)
   invisible(lapply(files,
             FUN = process_and_save_Rds, 
             output_dir = output_dir,
             processed_dir = processed_dir))
-}
-# Seeks the simulation output that belongs to the analysis_scenario and 
-# datagen_scenario scen_num
-seek_output_file <- function(analysis_scenario, 
-                             scen_num,
-                             output_dir){
-  dir_name <- get_dir_name(analysis_scenario, data_dir = output_dir)
-  file_name <- get_file_name(analysis_scenario, scen_num)
-  file <- paste0(dir_name, "/", file_name)
 }
 # Formats a .Rds file from output_dir and saves in processed_dir
 process_and_save_Rds <- function(file,
