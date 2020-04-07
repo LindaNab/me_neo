@@ -2,7 +2,7 @@
 ## Internal validation sampling strategies for exposure 
 ## measurement error correction
 ##
-## 2 Sample validation data at random/uniform or by sampling the extremes
+## Sample validation data at random/uniform or by sampling the extremes
 ## lindanab4@gmail.com - 20200221
 #############################################################
 
