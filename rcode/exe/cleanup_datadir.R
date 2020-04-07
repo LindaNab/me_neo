@@ -9,7 +9,7 @@
 ##############################
 # 0 - Load librairies + source code 
 ##############################
-source(file = "./rcode/sim/sim_scen.R")
+source(file = "./rcode/dgm/sim_scen.R")
 source(file = "./rcode/tools/remove_data.R")
 
 # Select datagen_scenarios and analysis_scenarios to be removed
