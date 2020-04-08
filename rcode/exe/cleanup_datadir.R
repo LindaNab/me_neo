@@ -2,7 +2,7 @@
 ## Internal validation sampling strategies for exposure 
 ## measurement error correction
 ##
-## Delete dirs + .Rds files in output/processed/summarised
+## Delete dirs + .Rds files in .data/ [output/processed/summarised]
 ## lindanab4@gmail.com - 20200403
 #############################################################
 
