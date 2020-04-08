@@ -96,12 +96,17 @@ select_subjects_uniform <- function(bin, data, use_variable){
 select_valdata <- function(data, 
                            use_variable = NA,
                            size_valdata,
-                           sampling_strat){
+                           sampling_strat,
+                           seed = NULL){
   # total number of subjects in data
   n <- NROW(data)
   # desired  number of subjects in valdata
   n_valdata <- ceiling(n * size_valdata)
   if (sampling_strat == "random"){
+    if (is.null(seed)){
+      stop("There is no seed to select the valdata at random")
+    }
+    set.seed(seed + 1) # needed to provide that results are reproducible
     data$in_valdata <- sample(c(rep(0, n - n_valdata), rep(1, n_valdata)), 
                               size = n, replace = FALSE)
   }

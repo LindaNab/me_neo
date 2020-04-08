@@ -103,7 +103,8 @@ perform_one_run <- function(seed,
   results <- apply(use_analysis_scenarios, 
                    1, 
                    FUN = analyse_data, 
-                   data = data)
+                   data = data,
+                   seed = seed)
   results <- as.data.frame(t(rbind(results, 
                                    seed,
                                    apply(use_analysis_scenarios, 

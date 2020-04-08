@@ -46,14 +46,16 @@ get_result <- function(data,
 # 2 - Work horse that samples data and pulls the result
 ##############################
 analyse_data <- function(analysis_scenario, 
-                         data){
+                         data,
+                         seed){
   size_valdata <- as.numeric(analysis_scenario[['size_valdata']])
   sampling_strat <- analysis_scenario[['sampling_strat']]
   method <- analysis_scenario[['method']]
   data <- select_valdata(data = data, 
                          size_valdata = size_valdata, 
                          use_variable = "WC",
-                         sampling_strat = sampling_strat)
+                         sampling_strat = sampling_strat,
+                         seed = seed)
   result <- get_result(data, method)
   result <- c(result,
               "n_valdata" = NROW(data[data$in_valdata == 1,]))
