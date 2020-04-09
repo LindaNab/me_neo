@@ -92,6 +92,7 @@ perform_one_run <- function(seed,
                             datagen_scenario,
                             use_analysis_scenarios,
                             output_dir){
+  print(paste0("Perform_one_run with seed: ", seed))
   # generate data
   data <- gen_data(lambda = datagen_scenario[['lambda']],
                    theta = datagen_scenario[['theta']],
