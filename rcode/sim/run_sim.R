@@ -140,7 +140,7 @@ sim_one_datagen_scenario <- function(datagen_scenario,
                     datagen_scenario = datagen_scenario,
                     use_analysis_scenarios = use_analysis_scenarios,
                     output_dir = output_dir)
-    print(i)
+    print(paste0("Run #", i, " with seed: ", seed))
   }
 }
 # Workhorse of the simulation study. For each of the datagen_scenarios(), rep 
