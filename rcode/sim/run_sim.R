@@ -134,7 +134,8 @@ sim_one_datagen_scenario <- function(datagen_scenario,
                                      output_dir){
   scen_num <- as.numeric(datagen_scenario['scen_num'])
   for(i in 1:rep){
-    perform_one_run(seed = seeds[(rep * scen_num + i)], # for now, seed for 
+    seed = seeds[(rep * scen_num + i)]
+    perform_one_run(seed = seed, # for now, seed for 
                     # each datagen_scenario() is: S0: 1 - 5000, S1: 5001 - 10000
                     # etc. if rep = 5000
                     datagen_scenario = datagen_scenario,
