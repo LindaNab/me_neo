@@ -154,7 +154,7 @@ save_summary <- function(summary, summarised_dir){
 summarize_sim <- function(use_analysis_scenarios = analysis_scenarios(),
                           use_datagen_scenarios = datagen_scenarios(),
                           processed_dir = "./data/processed",
-                          summarised_dir = "./data/summarised"){
+                          summarised_dir = "./results/summaries"){
   # summary will inculde all different analysis_scenarios times the different 
   # datagen_scenarios
   sim_scen_levels <- merge(use_analysis_scenarios, 
