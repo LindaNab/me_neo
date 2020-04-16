@@ -9,17 +9,17 @@ This simulation study is ran with use of [GitHub Actions](https://github.com/fea
 The simulation output on which the results of the paper are based is available in the directory [./data/output](./data/output). 
 
 ## Simulation scenarios
-The simulation study is based on 41 different data generating mechanisms, referred to as S0-S40 (`scen_num`). These different data generating mechanisms are defined by the function `datagen_scenarios()` available in rcode/dgm/sim_scen.R. The data generating mechanisms vary by: the explained variance of the measurement error model (`R_squared`/`tau`); the skewness of the residual errors of the model for visceral adipose tissue given sex, age and total body fat (`skewness`/`lambda`); whether the measurement model is linear or non-linear (`linear`). For each of these 41 data generating mechanisms, 5000 data sets were generated.
+The simulation study is based on 41 different data generating mechanisms, referred to as S0-S40 (`scen_num`). These different data generating mechanisms are defined by the function `datagen_scenarios()` available in [./rcode/dgm/sim_scen.R](./rcode/dgm/sim_scen.R). The data generating mechanisms vary by: the explained variance of the measurement error model (`R_squared`/`tau`); the skewness of the residual errors of the model for visceral adipose tissue given sex, age and total body fat (`skewness`/`lambda`); whether the measurement model is linear or non-linear (`linear`). For each of these 41 data generating mechanisms, 5000 data sets were generated.
 
-Each one of these data sets were analysed using 60 different analyses. These different analysis scenarios are defined by the function `analysis_scenarios()` available in rcode/dgm/sim_scen.R. The analysis scenarios vary by: how the data in the validation sample is sampled (`sampling_strat`); which (measurement error correction) is applied (`method`); the percentage of individuals in the validation sample (`size_valdata`).
+Each one of these data sets were analysed using 60 different analyses. These different analysis scenarios are defined by the function `analysis_scenarios()` available in [./rcode/dgm/sim_scen.R](./rcode/dgm/sim_scen.R). The analysis scenarios vary by: how the data in the validation sample is sampled (`sampling_strat`); which (measurement error correction) is applied (`method`); the percentage of individuals in the validation sample (`size_valdata`).
 
-The name of the output files (in ./data/output) of the simulation study are contructed as follows:
+The structure of the output files of the simulation study in [./data/output](./data/output) is as follows:
 size_valdata_(`size_valdata`*100)/method_`method`/`scen_num`_`sampling_strat`.Rds
 
 ## Processing results of simulation study (under construction)
-The R script ./sumsim/process_sim_output.R processes the simulation output in ./data/output (e.g., adds column names and takes the square root of model based variances). The processed simulation output is saved in ./data/processed holding the same directory structure as the unprocessed simulation output. 
+The R script [./sumsim/process_sim_output.R](./sumsim/process_sim_output.R) processes the simulation output in [./data/output](./data/output) (e.g., adds column names and takes the square root of model based variances). The processed simulation output is saved in ./data/processed holding the same directory structure as the unprocessed simulation output. 
 
-The R script ./rcode/sumsim/sum_processed_output.R summarises the processed output of the validation study and saves the summary as ./results/summaries/summary.Rds. 
+The R script [./rcode/sumsim/sum_processed_output.R](./rcode/sumsim/sum_processed_output.R) summarises the processed output of the validation study and saves the summary as [./results/summaries/summary.Rds](./results/summaries/summary.Rds). 
 
 The R code in ./rcode/tabular creates tables with the results of the simulation study. The table that is produced by the script can be used in LaTeX files. The script uses the .rds files available in ./data/processed. The output of the script is saved in .results/tables.
 
