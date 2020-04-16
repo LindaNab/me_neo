@@ -39,27 +39,27 @@ calc_lambda <- function(skewness, k = 6.1){
 
 ############################## 
 # 2 - Function that creates data.frame with 50 scenarios used to generate data
-#     varying lambda, tau and whether measurement error is heteroscedastic or 
-#     not (1 or 0, respectively)
+#     varying lambda, tau and whether the measurement error model is linear or 
+#     non-linear (1 or 0, respectively)
 ##############################
 datagen_scenarios <- function(){
   skewness <- c(0.1, 1, 1.5, 3)
   lambdas <- sapply(skewness, calc_lambda)
   R_squared <- c(0.2, 0.4, 0.6, 0.8, 0.9)
   taus <- sapply(R_squared, calc_tau)
-  heteroscedastic <- c(0, 1)
+  linear <- c(0, 1)
   
   # data.frame with simulation scenarios
   datagen_scenarios <- expand.grid(lambdas, 
                                    taus, 
-                                   heteroscedastic)
+                                   linear)
   # Add theta (theta = 0.16 in scenarios 1-50 but theta = 1 in scenario 0)
   datagen_scenarios$theta <- 0.8
   # Add scenarios nums
   datagen_scenarios$scen_num <- c(1:NROW(datagen_scenarios))
   colnames(datagen_scenarios) <- c("lambda", 
                                    "tau", 
-                                   "heteroscedastic",
+                                   "linear",
                                    "theta",
                                    "scen_num")
   # add corresponding R_squared to taus (convenient for results)
@@ -82,7 +82,7 @@ datagen_scenarios_S0 <- function(){
   skewness = 0.1
   S0 <- c(lambda = calc_lambda(skewness),
           tau = calc_tau(R_squared, theta = 1),
-          heteroscedastic = 0,
+          linear = 0,
           theta = 1,
           scen_num = 0,
           R_squared = R_squared,
@@ -113,16 +113,16 @@ analysis_scenarios <- function(){
 ############################## 
 # 4 - Script that checks R-squared
 ############################## 
-# R-squared is correct for S0-S25. If error is heteroscedastic, tau is equal in 
-# those cases, but R_squared will be lower than desired (S26-S50)
-# datagen_scenario <- datagen_scenarios()[26,]
+# R-squared is correct for S0-S20. If measurement error is non-linear, tau is 
+# equal in those cases, but R_squared will be lower than desired (S21-S40)
+# datagen_scenario <- datagen_scenarios()[21,]
 # seed <- 20200330
 # # from run_sim
 # data <- gen_data(nobs <- 1e6, 
 #                  lambda = datagen_scenario[['lambda']],
 #                  theta = datagen_scenario[['theta']],
 #                  tau = datagen_scenario[['tau']],
-#                  heteroscedastic = datagen_scenario[['heteroscedastic']],
+#                  linear = datagen_scenario[['linear']],
 #                  seed = seed)
 # # r_squared
 # fit <- lm(WC ~ VAT, data = data)

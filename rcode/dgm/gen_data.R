@@ -20,7 +20,7 @@ gen_data <- function(nobs = 650,
                      tau, 
                      beta = 0.2, 
                      sigma = sqrt(0.3),
-                     heteroscedastic = 0,
+                     linear = 1,
                      seed){
   # Initialize out_df that will be filled with the generated data
   out_df <- data.frame(sex = numeric(nobs), 
@@ -46,16 +46,13 @@ gen_data <- function(nobs = 650,
                         rgamma(n = nobs, 
                                shape = shape,
                                scale = scale))
-  if (heteroscedastic == 1){
-    out_df$WC <- with (out_df, rnorm(n = nobs,
-                                     mean = theta * VAT,
-                                     sd = abs(tau * (VAT / mean(VAT)))))
+  if (linear == 0){ # make linear 2 if measurement error is supposed to be 
+    linear <- 2     # non-linear (linear: ^ 1 / 1; non-linear: ^ 1 / 2)
   }
-  else {
   out_df$WC <- with (out_df, rnorm(n = nobs,
-                                   mean = theta * VAT, 
+                                   mean = theta * sign(VAT) * 
+                                     abs(VAT)^(1 / linear),
                                    sd = tau))
-  }
   out_df$IR_ln  <- with (out_df, rnorm(n = nobs,
                                        mean = 0.5 + beta * VAT - 0.5 * sex +
                                          0.01 * age + 0.3 * TBF,

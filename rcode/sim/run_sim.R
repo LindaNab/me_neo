@@ -13,21 +13,21 @@
 # follows: for each size of the validation data (10, 25, 40 or 50 percent), a 
 # directory is created in ./data/output. Within those directories, directories
 # are created for each method (cc, eff_reg_cal, inadm_reg_cal, naive, reg_cal)
-# This results in 20 different output folders. In each folder, 150 RDS files
-# will be saved: the 50 datagen_scenarios() will be named S1-S50, for each 
+# This results in 20 different output folders. In each folder, 123 RDS files
+# will be saved: the 41 datagen_scenarios() will be named S0-S40, for each 
 # scenario, 3 RDS files will be created, with the suffix _random, _uniform or 
-# _extremes. In total there will be 20 folders, each including 150 files (3 
-# times 50). The structure is displayed here:
+# _extremes. In total there will be 20 folders, each including 123 files (3 
+# times 41). The structure is displayed here:
 # ./data/output
 # ├── size_valdata_10
-# │ ├── method_complete_case <- S1_random,.., S1_extremes,.., S50_extremes
+# │ ├── method_complete_case <- S0_random,.., S1_extremes,.., S40_extremes
 # │ ├── ...
-# │ └── method_reg_cal <- S1_random,.., S1_extremes,.., S50_extremes
+# │ └── method_reg_cal <- S0_random,.., S1_extremes,.., S40_extremes
 # ...
 # └── size_valdata_50 
-#   ├── method_complete_case <- S1_random,.., S1_extremes,.., S50_extremes
+#   ├── method_complete_case <- S0_random,.., S1_extremes,.., S40_extremes
 #   ├── ...
-#   └── method_reg_cal <- S1_random,.., S1_extremes,.., S50_extremes
+#   └── method_reg_cal <- S0_random,.., S1_extremes,.., S40_extremes
 
 ##############################
 # 0 - Load librairies + source code 
@@ -97,7 +97,7 @@ perform_one_run <- function(seed,
   data <- gen_data(lambda = datagen_scenario[['lambda']],
                    theta = datagen_scenario[['theta']],
                    tau = datagen_scenario[['tau']],
-                   heteroscedastic = datagen_scenario[['heteroscedastic']],
+                   linear = datagen_scenario[['linear']],
                    seed = seed)
   scen_num <- datagen_scenario[['scen_num']]
   # analyse the data using use_analysis_scenarios
