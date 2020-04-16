@@ -6,7 +6,7 @@ This repository contains the code and simulation output of the simulation study 
 ## Running simulation study
 This simulation study is ran with use of [GitHub Actions](https://github.com/features/actions). A particular (series of) job(s) can be executed by using main.yml available in the directory .github/workflows. The YAML is used to run the R script execute_simstudy_gha.R, available in the directory ./rcode/exe, and uses the arguments `scen_num` (number of scenario, see next section) and `rep` (number of replications). After the job has run, a new branch is created named patch_Sscen_num. This newly created branch contains the simulation output for that particular simulation scenario `scen_num`.
 
-The simulation output on which the results of the paper are based is available in the directory (./data/output). 
+The simulation output on which the results of the paper are based is available in the directory [./data/output](./data/output). 
 
 ## Simulation scenarios
 The simulation study is based on 41 different data generating mechanisms, referred to as S0-S40 (`scen_num`). These different data generating mechanisms are defined by the function `datagen_scenarios()` available in rcode/dgm/sim_scen.R. The data generating mechanisms vary by: the explained variance of the measurement error model (`R_squared`/`tau`); the skewness of the residual errors of the model for visceral adipose tissue given sex, age and total body fat (`skewness`/`lambda`); whether the measurement model is linear or non-linear (`linear`). For each of these 41 data generating mechanisms, 5000 data sets were generated.
