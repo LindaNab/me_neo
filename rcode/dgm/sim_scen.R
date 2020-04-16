@@ -47,7 +47,7 @@ datagen_scenarios <- function(){
   lambdas <- sapply(skewness, calc_lambda)
   R_squared <- c(0.2, 0.4, 0.6, 0.8, 0.9)
   taus <- sapply(R_squared, calc_tau)
-  linear <- c(0, 1)
+  linear <- c(1, 0) #(yes, no)
   
   # data.frame with simulation scenarios
   datagen_scenarios <- expand.grid(lambdas, 
