@@ -1,0 +1,55 @@
+name: Run simulation study
+on: 
+  push:
+    paths:
+    - ".github/workflows/main.yml"
+
+jobs:
+  run_sim:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scen_num: [41]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: 3.5.1
+      - name: Install Package Dependencies
+        run: |-
+          Rscript -e "install.packages('remotes')"
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
+      - name: Run simulation study for scen_num ${{ matrix.scen_num }}
+        run: |-
+          Rscript rcode/exe/execute_simstudy_diffmes_gha.R ${{ matrix.scen_num }} 5000
+      - uses: actions/upload-artifact@v1
+        with:
+          name: data-output-S${{ matrix.scen_num }}
+          path: data/output
+  push_data:
+    needs: [run_sim]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scen_num: [41]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: peterjgrainger/action-create-branch@v1.0.0
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: patch_S${{ matrix.scen_num }}
+      - uses: actions/checkout@v2
+        with:
+          ref: patch_S${{ matrix.scen_num }}   
+      - uses: actions/download-artifact@v1
+        with:
+          name: data-output-S${{ matrix.scen_num }}
+          path: data/output
+      - name: Add, commit and push changes to branch
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ./data/output/*
+          git commit -m "Add output of simulation run" -a || echo "No changes to commit"
+          git push || echo "Nothing to push"
