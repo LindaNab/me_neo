@@ -40,7 +40,8 @@ calc_lambda <- function(skewness, k = 6.1){
 ############################## 
 # 2 - Function that creates data.frame with 50 scenarios used to generate data
 #     varying lambda, tau and whether the measurement error model is linear or 
-#     non-linear (1 or 0, respectively)
+#     non-linear (1 or 0, respectively) and if measurement error is differential
+#     or not (FALSE, TRUE)
 ##############################
 datagen_scenarios <- function(){
   skewness <- c(0.1, 1, 1.5, 3)
@@ -48,11 +49,13 @@ datagen_scenarios <- function(){
   R_squared <- c(0.2, 0.4, 0.6, 0.8, 0.9)
   taus <- sapply(R_squared, calc_tau)
   linear <- c(1, 0) #(yes, no)
+  differential <- FALSE
   
   # data.frame with simulation scenarios
   datagen_scenarios <- expand.grid(lambdas, 
                                    taus, 
-                                   linear)
+                                   linear,
+                                   differential)
   # Add theta (theta = 0.16 in scenarios 1-50 but theta = 1 in scenario 0)
   datagen_scenarios$theta <- 0.8
   # Add scenarios nums
@@ -60,6 +63,7 @@ datagen_scenarios <- function(){
   colnames(datagen_scenarios) <- c("lambda", 
                                    "tau", 
                                    "linear",
+                                   "differential",
                                    "theta",
                                    "scen_num")
   # add corresponding R_squared to taus (convenient for results)
@@ -72,9 +76,10 @@ datagen_scenarios <- function(){
                              by.x = 'lambda', by.y = 'lambdas')
   # Use orderning according to scen_num
   datagen_scenarios <- datagen_scenarios[order(datagen_scenarios$scen_num),]
-  # Add S0
+  # Add S0 and differential measurement error model scenario
   datagen_scenarios <- rbind(datagen_scenarios_S0(),
-                             datagen_scenarios)
+                             datagen_scenarios,
+                             datagen_scenarios_diff())
   return(datagen_scenarios)}
 
 datagen_scenarios_S0 <- function(){
@@ -82,15 +87,29 @@ datagen_scenarios_S0 <- function(){
   skewness = 0.1
   S0 <- c(lambda = calc_lambda(skewness),
           tau = calc_tau(R_squared, theta = 1),
-          linear = 0,
+          linear = 1,
+          differential = FALSE,
           theta = 1,
           scen_num = 0,
           R_squared = R_squared,
           skewness = skewness)
 }
+
+datagen_scenarios_diff <- function(){
+  R_squared = 0.8
+  skewness = 0.1
+  S0 <- c(lambda = calc_lambda(skewness),
+          tau = calc_tau(R_squared, theta = 0.8),
+          linear = 1,
+          differential = TRUE,
+          theta = 0.8,
+          scen_num = 41, # hardcoded which is not the best solution
+          R_squared = R_squared,
+          skewness = skewness)  
+}
 ############################## 
 # 3 - Function that creates data.frame with 50 scenarios, differently analysing
-# the data 
+#     the data 
 ############################## 
 analysis_scenarios <- function(){
   sampling_strat <- c("random", "uniform", "extremes")
@@ -100,7 +119,6 @@ analysis_scenarios <- function(){
               "efficient_reg_cal",
               "inadm_reg_cal")
   size_valdata <- c(0.10, 0.25, 0.40, 0.50)
-  size_valdata_percent <- 100 * size_valdata
   # data.frame with simulation scenarios
   analyse_scenarios <- expand.grid(sampling_strat,
                                    method,
@@ -115,14 +133,15 @@ analysis_scenarios <- function(){
 ############################## 
 # R-squared is correct for S0-S20. If measurement error is non-linear, tau is 
 # equal in those cases, but R_squared will be lower than desired (S21-S40)
-# datagen_scenario <- datagen_scenarios()[21,]
+# datagen_scenario <- datagen_scenarios()[42,]
 # seed <- 20200330
 # # from run_sim
-# data <- gen_data(nobs <- 1e6, 
+# data <- gen_data(nobs <- 1e6,
 #                  lambda = datagen_scenario[['lambda']],
 #                  theta = datagen_scenario[['theta']],
 #                  tau = datagen_scenario[['tau']],
 #                  linear = datagen_scenario[['linear']],
+#                  differential = datagen_scenario[['differential']],
 #                  seed = seed)
 # # r_squared
 # fit <- lm(WC ~ VAT, data = data)

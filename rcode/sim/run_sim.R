@@ -98,6 +98,7 @@ perform_one_run <- function(seed,
                    theta = datagen_scenario[['theta']],
                    tau = datagen_scenario[['tau']],
                    linear = datagen_scenario[['linear']],
+                   differential = datagen_scenario[['differential']],
                    seed = seed)
   scen_num <- datagen_scenario[['scen_num']]
   # analyse the data using use_analysis_scenarios

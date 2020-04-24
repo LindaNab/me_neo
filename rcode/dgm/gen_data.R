@@ -21,6 +21,7 @@ gen_data <- function(nobs = 650,
                      beta = 0.2, 
                      sigma = sqrt(0.3),
                      linear = 1,
+                     differential = FALSE,
                      seed){
   # Initialize out_df that will be filled with the generated data
   out_df <- data.frame(sex = numeric(nobs), 
@@ -49,13 +50,27 @@ gen_data <- function(nobs = 650,
   if (linear == 0){ # make linear 2 if measurement error is supposed to be 
     linear <- 2     # non-linear (linear: ^ 1 / 1; non-linear: ^ 1 / 2)
   }
-  out_df$WC <- with (out_df, rnorm(n = nobs,
-                                   mean = theta * sign(VAT) * 
-                                     abs(VAT)^(1 / linear),
-                                   sd = tau))
-  out_df$IR_ln  <- with (out_df, rnorm(n = nobs,
-                                       mean = 0.5 + beta * VAT - 0.5 * sex +
-                                         0.01 * age + 0.3 * TBF,
-                                       sd = sigma))
+  if (differential == FALSE){ # non-differential measurement error
+    out_df$WC <- with (out_df, rnorm(
+      n = nobs,
+      mean = theta * sign(VAT) * abs(VAT) ^ (1 / linear),
+      sd = tau
+    ))
+    out_df$IR_ln  <- with (out_df, rnorm(
+      n = nobs,
+      mean = 0.5 + beta * VAT - 0.5 * sex + 0.01 * age + 0.3 * TBF,
+      sd = sigma
+    ))
+  } else if (differential == TRUE){ # differential measurement error 
+    U <- rbinom(nobs, 1, 0.5)
+    out_df$WC <- with (out_df, rnorm(
+      n = nobs,
+      mean = theta * sign(VAT) * abs(VAT)^(1 / linear) + tau * U,
+      sd = tau))
+    out_df$IR_ln  <- with (out_df, rnorm(
+      n = nobs,
+      mean = 0.5 + beta * VAT - 0.5 * sex + 0.01 * age + 0.3 * TBF + sigma * U,
+      sd = sigma))
+  }
   out_df
 }
