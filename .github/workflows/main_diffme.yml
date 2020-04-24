@@ -1,4 +1,4 @@
-name: Run simulation study
+name: Run simulation study differential measerror
 on: 
   push:
     paths:
