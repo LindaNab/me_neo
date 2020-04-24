@@ -2,7 +2,7 @@ name: Run simulation study
 on: 
   push:
     paths:
-    - ".github/workflows/main.yml"
+    - ".github/workflows/main_diffme.yml"
 
 jobs:
   run_sim:
