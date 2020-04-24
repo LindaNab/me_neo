@@ -21,6 +21,6 @@ use_datagen_scenarios <- datagen_scenarios()[42,]
 use_analysis_scenarios <- 
   analysis_scenarios()[analysis_scenarios()$size_valdata == 0.4,]
 # Run simulation study
-run_sim(rep = args[1],
+run_sim(rep = args[2],
         use_datagen_scenarios = use_datagen_scenarios,
         use_analysis_scenarios = use_analysis_scenarios)
