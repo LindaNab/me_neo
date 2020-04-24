@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+for i in {25..40};
+do git merge origin/patch_S${i} --no-commit
+git commit -m "add results of simulation scenario S${i}";
+done
