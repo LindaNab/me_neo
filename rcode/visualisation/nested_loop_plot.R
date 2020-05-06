@@ -48,9 +48,12 @@ get_placement <- function(by, limits) {
   }
   placement
 }
-# creates a list of summaries, for random/uniform/extreme sampling 
-# using the selected use_size_valdata
-select_summary <- function(summary, use_size_valdata, use_method, use_sampling_strats) {
+# creates a list of summaries, for use_sampling_strats 
+# using the selected use_size_valdata and use_method
+select_summary <- function(summary, 
+                           use_size_valdata, 
+                           use_method, 
+                           use_sampling_strats) {
   summary <- subset(
     summary,
     size_valdata == use_size_valdata &
@@ -60,7 +63,7 @@ select_summary <- function(summary, use_size_valdata, use_method, use_sampling_s
   )
   select_sampling_strat <- function(summary, use_sampling_strat){
     subset <- subset(summary,
-                  sampling_strat == use_sampling_strat)
+                     sampling_strat == use_sampling_strat)
   }
   out <- lapply(as.list(use_sampling_strats),
          FUN = select_sampling_strat,
@@ -68,38 +71,29 @@ select_summary <- function(summary, use_size_valdata, use_method, use_sampling_s
   names(out) <- use_sampling_strats
   out
 }
-# select_summary_method <- function(summary, use_size_valdata) {
-#   summary <- subset(
-#     summary,
-#     size_valdata == use_size_valdata &
-#       (R_squared == 0.2 | R_squared == 0.4 | R_squared == 0.6 | R_squared == 0.8) &
-#       (skewness == 0.1 | skewness == 1.5 | skewness == 3) &
-#       (method != "naive")
-#   )
-#   sub_summary_rc <-
-#     subset(
-#       summary,
-#       method == "reg_cal"
-#     )
-#   sub_summary_erc <-
-#     subset(
-#       summary,
-#       method == "efficient_reg_cal"
-#     )
-#   sub_summary_irc <-
-#     subset(
-#       summary,
-#       method == "inadm_reg_cal"
-#     )
-#   sub_summary_cc <-
-#     subset(
-#       summary,
-#       method == "complete_case"
-#     )
-#   out <- list(sub_summary_rc, sub_summary_erc, sub_summary_irc, sub_summary_cc)
-#   names(out) <- c("rc", "erc", "irc", "cc")
-#   out
-# }
+# creates a list of summaries, for use_methods
+# using the selected use_size_valdata and use_sampling strat
+select_summary_method <- function(summary, 
+                                  use_size_valdata, 
+                                  use_sampling_strat,
+                                  use_methods){
+  summary <- subset(
+    summary,
+    size_valdata == use_size_valdata &
+      sampling_strat == use_sampling_strat &
+      (R_squared == 0.2 | R_squared == 0.4 | R_squared == 0.6 | R_squared == 0.8) &
+      (skewness == 0.1 | skewness == 1.5 | skewness == 3)
+  )
+  select_method <- function(summary, use_method){
+    subset <- subset(summary,
+                     method == use_method)
+  }
+  out <- lapply(as.list(use_methods),
+                FUN = select_method,
+                summary = summary)
+  names(out) <- use_methods
+  out
+}
 # Function that creates a nested loop plot, using the defined limits, eg
 # c(-100, 100) if stats is percentage bias
 create_nlp <- function(summary, 
@@ -150,8 +144,8 @@ create_nlp <- function(summary,
   segments(0, ref, 24, ref, col = "grey")
   if (legend == T){
     legend("bottomright",
-           legend = c("random", "uniform", "extremes"),
-           lty = c(1, 2, 3),
+           legend = use_sampling_strats,
+           lty = 1:length(use_sampling_strats),
            bty = "n",
            horiz = F,
            cex = 0.5,
@@ -179,6 +173,103 @@ create_nlp <- function(summary,
       levels[[i]]$y <- c(rep(seq(from = placement[[n_levels - i + 1]][1],
                             to = placement[[n_levels - i + 1]][2],
                             length.out = levels_length[i]), j),
+                         placement[[n_levels - i + 1]][2])
+      j <- j * levels_length[i]
+    }
+    levels
+  }
+  for (i in seq_along(get_levels())){ # plot steps of levels
+    lines(get_levels()[[i]][[1]], get_levels()[[i]][[2]], 
+          type = "s", 
+          col = "grey")
+  }
+  for (i in seq_along(get_by()$names)){ # names of step levels
+    text(0,
+         placement[[length(get_by()$names) + 1 - i]][3], 
+         get_by()$names[i], 
+         adj = c(0, 0), 
+         cex = 0.5)
+  }
+}
+create_nlp_method <- function(summary, 
+                              stats, 
+                              ref,
+                              limits, 
+                              xlab, 
+                              ylab,
+                              use_size_valdata,
+                              use_sampling_strat,
+                              use_methods,
+                              legend = T) {
+  sub_summary <- select_summary_method(
+    summary,
+    use_size_valdata = use_size_valdata,
+    use_sampling_strat = use_sampling_strat,
+    use_method = use_methods
+  )
+  placement <- get_placement(get_by(), limits = limits)
+  n_scen <- NROW(expand.grid(get_by()$levels))
+  scen_range <- 1:n_scen
+  par(mgp = c(0, 0.25, 0), mar = c(3.5, 3.5, 1, 1))
+  plot(0,
+       type = "n",
+       xaxt = "n",
+       yaxt = "n",
+       frame.plot = F,
+       ann = F,
+       xlim = c(0, n_scen),
+       ylim = c(limits[1], placement[[length(placement)]][3])
+  )
+  axis(1,
+       at = c(0, n_scen / 4, 2 * n_scen / 4, 3 * n_scen / 4, n_scen),
+       tck = - 0.01,
+       cex.axis = 0.75
+  )
+  mtext(xlab,
+        side = 1,
+        line = 1.5,
+        cex = 1
+  )
+  axis(2, 
+       at = c(limits[1], 0, limits[2], placement[[length(placement)]][3]),
+       tck = - 0.01,
+       cex.axis = 0.75
+  )
+  mtext(ylab, 
+        side = 2, 
+        line = 1.5)
+  segments(0, ref, 24, ref, col = "grey")
+  if (legend == T){
+    legend("bottomright",
+           legend = use_methods,
+           lty = 1:length(use_methods),
+           bty = "n",
+           horiz = F,
+           cex = 0.5,
+           x.intersp = 0.25,
+           seg.len = 2)
+  }
+  for (i in seq_along(sub_summary)) {
+    with (sub_summary[[i]], lines(
+      c(0, scen_range),
+      c(get(stats)[1], get(stats)),
+      type = "S",
+      lty = i
+    ))
+  }
+  get_levels <- function(){
+    n_levels <- length(get_by()$levels)
+    levels_length <- lengths(get_by()$levels)
+    levels <- vector(mode = "list", length = length(get_by()$levels))
+    names(levels) <- names(get_by()$levels)
+    j <- 1
+    for (i in seq_along(levels)) {
+      levels[[i]]$x <- seq(from = 0,
+                           to = n_scen,
+                           length.out = levels_length[i] * j + 1)
+      levels[[i]]$y <- c(rep(seq(from = placement[[n_levels - i + 1]][1],
+                                 to = placement[[n_levels - i + 1]][2],
+                                 length.out = levels_length[i]), j),
                          placement[[n_levels - i + 1]][2])
       j <- j * levels_length[i]
     }
