@@ -2,7 +2,7 @@
 ## Internal validation sampling strategies for exposure 
 ## measurement error correction
 ##
-## Summarize processed output
+## Summarise processed output
 ## lindanab4@gmail.com - 20200317
 #############################################################
 
@@ -11,22 +11,24 @@
 ##############################
 # The table contains #datagen_scenarios x #sampling_strat x #method x 
 # #size_valdata = 50 x 3 x 5 x 4 = 3000 rows, in this order:
-# size_valdata, method, sampling_strat, heterosc, expl_var, skewness, scen_num
-# 0.10          cc      random          0          0.1      0.2       S1
-# 0.10          cc      random          0          ..       ..        ..
-# 0.10          cc      random          0          6        0.8       S25
-# 0.10          cc      random          1          0.1      0.2       S26
-# 0.10          cc      random          1          ..       ..        ..
-# 0.10          cc      random          1          6        0.8       S50
-# ..            ..      ..              ..         ..       ..        ..
-# 0.10          cc      uniform         0          0.1      0.2       S1
-# 0.10          cc      uniform         0          ..       ..        ..
-# 0.10          cc      uniform         0          6        0.8       S25
-# 0.10          cc      uniform         1          0.1      0.2       S26
-# 0.10          cc      uniform         1          ..       ..        ..
-# 0.10          cc      uniform         1          6        0.8       S50
-# ..            ..      ..              ..                            ..
-# 0.50          irc     uniform         1          6        0.8       S50
+# size_valdata, method, sampling_strat, linear, diff, R_squared, skewness, scen_num
+#               cc      random          0       0    0.1      1         S0
+# 0.10          cc      random          0       0    0.1      0.2       S1
+# 0.10          cc      random          0       0    ..       ..        ..
+# 0.10          cc      random          0       0    6        0.8       S19
+# 0.10          cc      random          1            0.1      0.2       S20
+# 0.10          cc      random          1            ..       ..        ..
+# 0.10          cc      random          1            6        0.8       S40
+# ..            ..      ..              ..           ..       ..        ..
+# 0.10          cc      uniform         0            0.1      0.2       S1
+# 0.10          cc      uniform         0            ..       ..        ..
+# 0.10          cc      uniform         0            6        0.8       S19
+# 0.10          cc      uniform         1            0.1      0.2       S20
+# 0.10          cc      uniform         1            ..       ..        ..
+# 0.10          cc      uniform         1            6        0.8       S40
+# ..            ..      ..              ..                              ..
+# 0.50          irc     uniform         1            6        0.8       S40
+# 0.40          irc     uniform         0      1     0.1      0.8       S41
 # with the following columns (information):
 # bias, bias_mcse, mse, mse_mcse, cov, cov_mcse, 
 # modse, modse_mcse, empse, empse_mcse, n_valdata, n_sim
@@ -38,11 +40,6 @@ library(data.table)
 library(rsimsum)
 source(file = "./rcode/sim/run_sim.R")
 source(file = "./rcode/tools/file_handling.R")
-
-# To do: change eval_param in without _mcse and add later on
-# n_sim can get _mcse
-# n_valdata is the only param that not from simsum
-# To do 2: add notes
 
 ##############################
 # 1 - Evaluation params of sim study
@@ -122,7 +119,7 @@ fill_one_row_of_summary <- function(summary,
   }
   # Fill the row with the params in eval_param()
   fill_row_with_eval_param(row_num, summary, processed_output)
-  print(paste0(file, " summarized!"))
+  print(paste0(file, " summarised!"))
   summary[]
 }
 # uses simsum to fill the row of summary with the summarised sim params
@@ -143,18 +140,19 @@ fill_row_with_eval_param <- function(row_num, summary, processed_output){
   # value of the estimand is 0.2, see dgm
   summary[row_num, perc_bias := (summary[row_num, bias] / 0.2) * 100]
 }
-save_summary <- function(summary, summarised_dir){
-  output_file <- paste0(summarised_dir, "/summary.Rds")
+save_summary <- function(summary, summary_file_name, summarised_dir){
+  output_file <- paste0(summarised_dir, "/", summary_file_name)
   saveRDS(summary, file = output_file)
 }
 
 ##############################
 # 3 - Work horse ----
 ##############################
-summarize_sim <- function(use_analysis_scenarios = analysis_scenarios(),
+summarise_sim <- function(use_analysis_scenarios = analysis_scenarios(),
                           use_datagen_scenarios = datagen_scenarios(),
                           processed_dir = "./data/processed",
-                          summarised_dir = "./results/summaries"){
+                          summarised_dir = "./results/summaries",
+                          summary_file_name = "summary.Rds"){
   # summary will inculde all different analysis_scenarios times the different 
   # datagen_scenarios
   sim_scen_levels <- merge(use_analysis_scenarios, 
@@ -168,5 +166,5 @@ summarize_sim <- function(use_analysis_scenarios = analysis_scenarios(),
                use_datagen_scenarios = use_datagen_scenarios,
                processed_dir = processed_dir)
   # save summary
-  save_summary(summary, summarised_dir)
+  save_summary(summary, summary_file_name, summarised_dir)
 }

@@ -93,12 +93,13 @@ datagen_scenarios_S0 <- function(){
           scen_num = 0,
           R_squared = R_squared,
           skewness = skewness)
+  S0
 }
 
 datagen_scenarios_diff <- function(){
   R_squared = 0.8
   skewness = 0.1
-  S0 <- c(lambda = calc_lambda(skewness),
+  S41 <- c(lambda = calc_lambda(skewness),
           tau = calc_tau(R_squared, theta = 0.8),
           linear = 1,
           differential = TRUE,
@@ -106,6 +107,7 @@ datagen_scenarios_diff <- function(){
           scen_num = 41, # hardcoded which is not the best solution
           R_squared = R_squared,
           skewness = skewness)  
+  S41
 }
 ############################## 
 # 3 - Function that creates data.frame with 50 scenarios, differently analysing

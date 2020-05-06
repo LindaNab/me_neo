@@ -13,7 +13,7 @@ source(file = "./rcode/dgm/sim_scen.R")
 source(file = "./rcode/tools/remove_data.R")
 
 # Select datagen_scenarios and analysis_scenarios to be removed
-use_datagen_scenarios <- datagen_scenarios()[1:10,]
+use_datagen_scenarios <- datagen_scenarios()[1:20,]
 use_analysis_scenarios <- analysis_scenarios()
 
 ##############################
