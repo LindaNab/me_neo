@@ -210,7 +210,7 @@ create_nlp_method <- function(summary,
   placement <- get_placement(get_by(), limits = limits)
   n_scen <- NROW(expand.grid(get_by()$levels))
   scen_range <- 1:n_scen
-  par(mgp = c(0, 0.25, 0), mar = c(3.5, 3.5, 1, 1))
+  par(mgp = c(0, 0.25, 0), mar = c(4, 3, 1, 0.5))
   plot(0,
        type = "n",
        xaxt = "n",
@@ -237,14 +237,20 @@ create_nlp_method <- function(summary,
   )
   mtext(ylab, 
         side = 2, 
-        line = 1.5)
+        line = 1.5,
+        cex = 1
+  )
   segments(0, ref, 24, ref, col = "grey")
   if (legend == T){
-    legend("bottomright",
-           legend = use_methods,
+    legend("bottomleft",
+           legend = c("Complete case",
+                      "Regression calibration (RC)",
+                      "Efficient RC",
+                      "Inadmissible RC"),
            lty = 1:length(use_methods),
            bty = "n",
            horiz = F,
+           ncol = 2,
            cex = 0.5,
            x.intersp = 0.25,
            seg.len = 2)

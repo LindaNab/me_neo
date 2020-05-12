@@ -3,7 +3,7 @@
 ## measurement error correction
 ## Simulation study
 ##
-## Sampling strategy: extremes
+## Sampling strategy: uniform
 ## nested loop plots
 ## lindanab4@gmail.com - 20200506
 #############################################################
@@ -20,7 +20,7 @@ use_methods <- c("complete_case", "reg_cal",
 ##############################
 # 1 - Percentage bias ----
 ##############################
-png(paste0("./results/figures", "/perc_bias_extremes.png"),
+png(paste0("./results/figures", "/perc_bias_uniform.png"),
     width = 4, height = 4, units = 'in', res = 100)
 create_nlp_method(summary = summary,
                   stats = "perc_bias",
@@ -29,14 +29,14 @@ create_nlp_method(summary = summary,
                   xlab = "2 x 4 x 3 = 24 ordered scenarios",
                   ylab = "percentage bias",
                   use_size_valdata = 0.4,
-                  use_sampling_strat = "extremes", 
+                  use_sampling_strat = "uniform", 
                   use_methods = use_methods)
 dev.off()
 
 ##############################
 # 2 - MSE ----
 ##############################
-png(paste0("./results/figures", "/mse_extremes.png"),
+png(paste0("./results/figures", "/mse_uniform.png"),
     width = 4, height = 4, units = 'in', res = 100)
 create_nlp_method(summary = summary,
                   stats = "mse",
@@ -45,14 +45,14 @@ create_nlp_method(summary = summary,
                   xlab = "2 x 4 x 3 = 24 ordered scenarios",
                   ylab = "mean squared error",
                   use_size_valdata = 0.4,
-                  use_sampling_strat = "extremes", 
+                  use_sampling_strat = "uniform", 
                   use_methods = use_methods)
 dev.off()
 
 ##############################
 # 3 - coverage ----
 ##############################
-png(paste0("./results/figures", "/cover_extremes.png"),
+png(paste0("./results/figures", "/cover_uniform.png"),
     width = 4, height = 4, units = 'in', res = 100)
 create_nlp_method(summary = summary,
                   stats = "cover",
@@ -61,6 +61,6 @@ create_nlp_method(summary = summary,
                   xlab = "2 x 4 x 3 = 24 ordered scenarios",
                   ylab = "coverage",
                   use_size_valdata = 0.4,
-                  use_sampling_strat = "extremes", 
+                  use_sampling_strat = "uniform", 
                   use_methods = use_methods)
 dev.off()

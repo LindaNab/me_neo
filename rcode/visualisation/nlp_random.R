@@ -21,7 +21,7 @@ use_methods <- c("complete_case", "reg_cal",
 # 1 - Percentage bias ----
 ##############################
 png(paste0("./results/figures", "/perc_bias_random.png"),
-    width = 4, height = 4, units = 'in', res = 500)
+    width = 4, height = 4, units = 'in', res = 100)
 create_nlp_method(summary = summary,
                   stats = "perc_bias",
                   ref = 0,
@@ -37,7 +37,7 @@ dev.off()
 # 2 - MSE ----
 ##############################
 png(paste0("./results/figures", "/mse_random.png"),
-    width = 4, height = 4, units = 'in', res = 500)
+    width = 4, height = 4, units = 'in', res = 100)
 create_nlp_method(summary = summary,
                   stats = "mse",
                   ref = 0,
@@ -53,7 +53,7 @@ dev.off()
 # 3 - coverage ----
 ##############################
 png(paste0("./results/figures", "/cover_random.png"),
-    width = 4, height = 4, units = 'in', res = 500)
+    width = 4, height = 4, units = 'in', res = 100)
 create_nlp_method(summary = summary,
                   stats = "cover",
                   ref = 0.95,
