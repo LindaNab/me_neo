@@ -46,8 +46,13 @@ create_bins <- function(n_bins, n_each_bin, data, use_variable, n_valdata){
 # counts the number of subjects in the data between the bounds of that bin 
 # (n_data)
 count_n_data_bin <- function(bounds_bin, data, use_variable){
-  condition <- data[use_variable] < bounds_bin[2] & 
-    data[use_variable] >= bounds_bin[1] 
+  if (max(data[use_variable]) == bounds_bin[2]){
+    condition <- data[use_variable] >= bounds_bin[1] &
+      data[use_variable] <= bounds_bin[2] 
+  } else { 
+    condition <- data[use_variable] >= bounds_bin[1] &
+      data[use_variable] < bounds_bin[2]
+  }
   NROW(data[condition,])
 }
 # counts the number of subjects that should be sampled in the validation data 
@@ -82,10 +87,16 @@ update_n_each_bin <- function(n_each_bin, bins, n_valdata){
 }
 # selects the row numbers of the subjects that will be included in the 
 # validation sample sampled at random
-select_subjects_uniform <- function(bin, data, use_variable){
-  in_bin <- data[use_variable] >= bin[["lower_bound"]] & 
-    data[use_variable] < bin[["upper_bound"]]
+select_subjects_uniform <- function(bin, data, use_variable, seed){
+  if (max(data[use_variable]) == bin[["upper_bound"]]){
+    in_bin <- data[use_variable] >= bin[["lower_bound"]] & 
+      data[use_variable] <= bin[["upper_bound"]]
+  } else{
+    in_bin <- data[use_variable] >= bin[["lower_bound"]] & 
+      data[use_variable] < bin[["upper_bound"]]
+  }
   n_valdata_bin <- bin[["n_valdata_bin"]]
+  set.seed(seed) # needed to provide that results are reproducible
   sample(which (in_bin), n_valdata_bin)
 }
 
@@ -106,11 +117,14 @@ select_valdata <- function(data,
     if (is.null(seed)){
       stop("There is no seed to select the valdata at random")
     }
-    set.seed(seed + 1) # needed to provide that results are reproducible
     data$in_valdata <- sample(c(rep(0, n - n_valdata), rep(1, n_valdata)), 
                               size = n, replace = FALSE)
   }
   else if (sampling_strat == "uniform"){
+    if (is.null(seed)){
+      stop("There is no seed to select the valdata uniformly")
+    }
+    set.seed(seed + 1) 
     # add indicator to data whether subject is included in validation sample (1) 
     # or not (0)
     data$in_valdata <- rep(0, n)
@@ -126,7 +140,8 @@ select_valdata <- function(data,
       apply(bins, 1, 
             FUN = select_subjects_uniform, 
             data = data, 
-            use_variable = use_variable)
+            use_variable = use_variable,
+            seed = (seed + 1))
       )
     # change those subjects's 0 to 1
     data$in_valdata[rownumbers] <- 1
