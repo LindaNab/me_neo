@@ -13,7 +13,7 @@ source(file = "./rcode/sim/run_sim.R")
 args <- commandArgs(trailingOnly = TRUE)
 args <- as.numeric(args)
 # Select datagen_scenarios and analysis_scenarios to be used
-#args <- c(0, 5000)
+args <- c(1, 5000)
 use_datagen_scenarios <- datagen_scenarios()[args[1] + 1, ] # row 1 is scen_num 0
 use_analysis_scenarios <- subset(analysis_scenarios(), sampling_strat == "uniform")
 # seeds
@@ -24,6 +24,8 @@ file <- seek_files_analysis_scenario(analysis_scenario,
                                      use_datagen_scenarios,
                                      data_dir = "./data/output")
 seeds <- readRDS(file)[,5]
+seeds <- c(rep(0, args[1] * args[2]), seeds) # little weird work around to get
+# seeds[(rep * scen_num + i)] in perform_one_run (run_sim.R) equal to the seeds
 
 ##############################
 # 1 - Run simulation study 
