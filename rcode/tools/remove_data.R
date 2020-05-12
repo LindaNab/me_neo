@@ -6,6 +6,7 @@
 ## lindanab4@gmail.com - 20200319
 #############################################################
 source("./rcode/tools/create_data_dirs.R")
+source("./rcode/tools/file_handling.R")
 
 # Remove the .Rds files of the used analysis_scenarios and datagen_scenarios
 remove_files <- function(use_analysis_scenarios, 
