@@ -1,4 +1,4 @@
-name: Run simulation study differential measerror
+name: Run simulation study differential measuremement error
 on: 
   push:
     paths:
