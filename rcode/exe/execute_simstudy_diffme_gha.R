@@ -19,7 +19,8 @@ args <- as.numeric(args)
 # Select datagen_scenarios and analysis_scenarios to be used
 use_datagen_scenarios <- datagen_scenarios()[42,]
 use_analysis_scenarios <- 
-  analysis_scenarios()[analysis_scenarios()$size_valdata == 0.4,]
+  analysis_scenarios()[analysis_scenarios()$size_valdata == 0.4 &
+                         analysis_scenarios()$sampling_strat == "uniform",]
 # Run simulation study
 run_sim(rep = args[2],
         use_datagen_scenarios = use_datagen_scenarios,
