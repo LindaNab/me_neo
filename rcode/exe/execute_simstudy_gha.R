@@ -13,7 +13,7 @@ source(file = "./rcode/sim/run_sim.R")
 args <- commandArgs(trailingOnly = TRUE)
 args <- as.numeric(args)
 # Select datagen_scenarios and analysis_scenarios to be used
-args <- c(1, 5000)
+# args <- c(1, 5000)
 use_datagen_scenarios <- datagen_scenarios()[args[1] + 1, ] # row 1 is scen_num 0
 use_analysis_scenarios <- subset(analysis_scenarios(), sampling_strat == "uniform")
 # seeds
