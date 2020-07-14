@@ -14,15 +14,17 @@ source(file = "./rcode/sumsim/process_sim_output.R")
 source(file = "./rcode/sumsim/sum_processed_output.R")
 
 # Select datagen_scenarios and analysis_scenarios to be used
-use_datagen_scenarios <- datagen_scenarios()[42,]
-use_analysis_scenarios <- analysis_scenarios()[analysis_scenarios()$size_valdata == 0.4,]
+use_datagen_scenarios <- datagen_scenarios()[-42,]
+# use_analysis_scenarios <- subset(analysis_scenarios(), size_valdata == 0.4 &
+#                                    sampling_strat == "uniform")
+use_analysis_scenarios <- analysis_scenarios()
 
 ##############################
 # 1 - Run simulation study 
 ##############################
 # not run
 # run_sim()
-run_sim(rep = 2,
+run_sim(rep = 5000,
         use_datagen_scenarios = use_datagen_scenarios,
         use_analysis_scenarios = use_analysis_scenarios)
 
@@ -39,6 +41,9 @@ process_sim_output(use_datagen_scenarios = use_datagen_scenarios,
 ##############################
 # not run
 # summarise_sim()
-summarise_sim(use_datagen_scenarios = use_datagen_scenarios,
-              use_analysis_scenarios = use_analysis_scenarios,
+summarise_sim(use_datagen_scenarios = datagen_scenarios()[-42,],
+              use_analysis_scenarios = analysis_scenarios(),
+              summary_file_name = "summary.Rds")
+summarise_sim(use_datagen_scenarios = datagen_scenarios()[42,],
+              use_analysis_scenarios = subset(analysis_scenarios(), size_valdata == 0.4),
               summary_file_name = "summary_diffme.Rds")
