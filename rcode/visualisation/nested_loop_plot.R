@@ -29,15 +29,15 @@ get_by <- function() {
   by
 }
 # limits is fe c(-100, 100) if stats used is percentage bias
-get_placement <- function(by, limits) {
+get_placement <- function(by, limits, digits = 2) {
   delta <- diff(limits) / 10
   placement <- vector(mode = "list", length = length(by$levels))
   for (i in seq_along(placement)) {
     if (i == 1) {
       placement[[i]] <- c(
-        round(limits[2], digits = 2) + delta,
-        round(limits[2], digits = 2) + (7 / 4) * delta,
-        round(limits[2], digits = 2) + 2 * delta
+        round(limits[2], digits = digits) + delta,
+        round(limits[2], digits = digits) + (7 / 4) * delta,
+        round(limits[2], digits = digits) + 2 * delta
       )
     }
     else {
@@ -105,7 +105,9 @@ create_nlp <- function(summary,
                        use_size_valdata,
                        use_method, 
                        use_sampling_strats,
-                       legend = T) {
+                       legend = T, 
+                       y_axis_at = c(limits[1], 0, limits[2], placement[[length(placement)]][3]),
+                       y_axis_labels = F) {
   sub_summary <- select_summary(summary, 
                                 use_size_valdata = use_size_valdata, 
                                 use_method = use_method,
@@ -134,7 +136,8 @@ create_nlp <- function(summary,
     cex = 1
   )
   axis(2, 
-    at = c(limits[1], 0, limits[2], placement[[length(placement)]][3]),
+    at = c(y_axis_at, placement[[length(placement)]][3]),
+    labels = y_axis_labels,
     tck = - 0.01,
     cex.axis = 0.75
   )
@@ -200,14 +203,22 @@ create_nlp_method <- function(summary,
                               use_size_valdata,
                               use_sampling_strat,
                               use_methods,
-                              legend = T) {
+                              legend = T,
+                              y_axis_at = c(limits[1], 0, limits[2], placement[[length(placement)]][3]),
+                              y_axis_labels = F,
+                              legend_text = c("Internal validation sample restricted",
+                                              "Regression calibration (RC)",
+                                              "Efficient RC",
+                                              "Inadmissible RC"),
+                              lty = 1:length(use_methods),
+                              digits_plcmnt = 2) {
   sub_summary <- select_summary_method(
     summary,
     use_size_valdata = use_size_valdata,
     use_sampling_strat = use_sampling_strat,
     use_method = use_methods
   )
-  placement <- get_placement(get_by(), limits = limits)
+  placement <- get_placement(get_by(), limits = limits, digits = digits_plcmnt)
   n_scen <- NROW(expand.grid(get_by()$levels))
   scen_range <- 1:n_scen
   par(mgp = c(0, 0.25, 0), mar = c(4, 3, 1, 0.5))
@@ -231,7 +242,8 @@ create_nlp_method <- function(summary,
         cex = 1
   )
   axis(2, 
-       at = c(limits[1], 0, limits[2], placement[[length(placement)]][3]),
+       at = c(y_axis_at, placement[[length(placement)]][3]),
+       labels = y_axis_labels,
        tck = - 0.01,
        cex.axis = 0.75
   )
@@ -243,11 +255,8 @@ create_nlp_method <- function(summary,
   segments(0, ref, 24, ref, col = "grey")
   if (legend == T){
     legend("bottomleft",
-           legend = c("Complete case",
-                      "Regression calibration (RC)",
-                      "Efficient RC",
-                      "Inadmissible RC"),
-           lty = 1:length(use_methods),
+           legend = legend_text,
+           lty = lty,
            bty = "n",
            horiz = F,
            ncol = 2,
@@ -260,7 +269,7 @@ create_nlp_method <- function(summary,
       c(0, scen_range),
       c(get(stats)[1], get(stats)),
       type = "S",
-      lty = i
+      lty = lty[i]
     ))
   }
   get_levels <- function(){

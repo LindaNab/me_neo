@@ -25,12 +25,14 @@ png(paste0("./results/figures", "/perc_bias_uniform.png"),
 create_nlp_method(summary = summary,
                   stats = "perc_bias",
                   ref = 0,
-                  limits = c(-20, 5),
+                  limits = c(-20, 10),
                   xlab = "2 x 4 x 3 = 24 ordered scenarios",
-                  ylab = "percentage bias",
+                  ylab = "percentage bias (%)",
                   use_size_valdata = 0.4,
                   use_sampling_strat = "uniform", 
-                  use_methods = use_methods)
+                  use_methods = use_methods,
+                  y_axis_at = c(-20, 0, 10),
+                  y_axis_labels = c("-20", "0", "10", ""))
 dev.off()
 
 ##############################
@@ -41,12 +43,14 @@ png(paste0("./results/figures", "/mse_uniform.png"),
 create_nlp_method(summary = summary,
                   stats = "mse",
                   ref = 0,
-                  limits = c(-0.01, 0.05),
+                  limits = c(-0.05, 0.25),
                   xlab = "2 x 4 x 3 = 24 ordered scenarios",
                   ylab = "mean squared error",
                   use_size_valdata = 0.4,
                   use_sampling_strat = "uniform", 
-                  use_methods = use_methods)
+                  use_methods = use_methods,
+                  y_axis_at = c(-0.05, 0, 0.25),
+                  y_axis_labels = c("-0.05", "0", "0.25", ""))
 dev.off()
 
 ##############################
@@ -62,5 +66,7 @@ create_nlp_method(summary = summary,
                   ylab = "coverage",
                   use_size_valdata = 0.4,
                   use_sampling_strat = "uniform", 
-                  use_methods = use_methods)
+                  use_methods = use_methods,
+                  y_axis_at = c(0.8, 0.95, 1),
+                  y_axis_labels = c("0.8", "0.95", "1", ""))
 dev.off()
