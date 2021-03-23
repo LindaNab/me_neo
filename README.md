@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/242111024.svg)](https://zenodo.org/badge/latestdoi/242111024)
+
 # The me_neo repository
 
 ## Version 1.0.0
