@@ -1,7 +1,9 @@
+[![DOI](https://zenodo.org/badge/242111024.svg)](https://zenodo.org/badge/latestdoi/242111024)
+
 # The me_neo repository
 
-## Version 0.1.0
-This repository contains the code and simulation output of the simulation study accompanying the manuscript 'Internal validation data sampling strategies for exposure measurement error correction:  a study of visceral adipose tissue measurements replaced by waist circumference measurements' by Linda Nab et al.
+## Version 1.0.0
+This repository contains the code and simulation output of the simulation study accompanying the manuscript 'Internal validation data sampling strategies for exposure measurement error correction: a study of visceral adipose tissue measures replaced by waist circumference measures' by Linda Nab et al.
 
 ## Running simulation study
 This simulation study is ran with use of [GitHub Actions](https://github.com/features/actions). A particular (series of) job(s) can be executed by using main.yml available in the directory .github/workflows. The YAML is used to run the R script execute_simstudy_gha.R, available in the directory ./rcode/exe, and uses the arguments `scen_num` (number of scenario, see next section) and `rep` (number of replications). After the job has run, a new branch is created named patch_Sscen_num. This newly created branch contains the simulation output for that particular simulation scenario `scen_num`.
