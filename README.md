@@ -2,7 +2,7 @@
 
 # The me_neo repository
 
-## Version 1.0.0
+## Version 1.0.4
 This repository contains the code and simulation output of the simulation study accompanying the manuscript 'Internal validation data sampling strategies for exposure measurement error correction: a study of visceral adipose tissue measures replaced by waist circumference measures' by Linda Nab et al.
 
 ## Running simulation study
