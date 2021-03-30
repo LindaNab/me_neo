@@ -18,7 +18,7 @@ Each one of these data sets were analysed using 60 different analyses. These dif
 The structure of the output files of the simulation study in [./data/output](./data/output) is as follows:
 size_valdata_(`size_valdata`*100)/method_`method`/`scen_num`_`sampling_strat`.Rds
 
-## Processing results of simulation study (under construction)
+## Processing results of simulation study
 The R script [./sumsim/process_sim_output.R](./sumsim/process_sim_output.R) processes the simulation output in [./data/output](./data/output) (e.g., adds column names and takes the square root of model based variances). The processed simulation output is saved in ./data/processed holding the same directory structure as the unprocessed simulation output. 
 
 The R script [./rcode/sumsim/sum_processed_output.R](./rcode/sumsim/sum_processed_output.R) summarises the processed output of the validation study and saves the summary as [./results/summaries/summary.Rds](./results/summaries/summary.Rds). 
