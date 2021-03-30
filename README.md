@@ -25,7 +25,7 @@ The R script [./rcode/sumsim/sum_processed_output.R](./rcode/sumsim/sum_processe
 
 The R code in ./rcode/tabular creates tables with the results of the simulation study. The table that is produced by the script can be used in LaTeX files. The script uses the .rds files available in ./data/processed. The output of the script is saved in .results/tables.
 
-The R code in ./rcode/visualisation creates figures depicting the results of the simulation study. The script produces .pdf files. The scripts uses the .rds files available in ./data/processed. The output of the scripts are saved in .results/figures.
+The R code in ./rcode/visualisation creates figures depicting the results of the simulation study. The script produces .pdf files. The script uses the .rds files available in ./data/processed. The output of the scripts are saved in .results/figures.
 
 Download the repository by using:
 ```console
