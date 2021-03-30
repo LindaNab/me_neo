@@ -43,7 +43,7 @@ sum_analysis <- sum_analysis[order(sampling_strat, -linear, method, R_squared, s
 ##############################
 # Select values needed from summary object
 caption <- 
-  c("Percentage bias and coverage in the simulation study")
+  c("Percentage bias and coverage in the estimated association between visceral adipose tissue and insulin resistance with an internal validation sample of 10\% of the main study's sample size")
 table <-
   sum_analysis[, c("sampling_strat",
                    "linear", 

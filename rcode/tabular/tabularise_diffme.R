@@ -28,6 +28,10 @@ sum_analysis_diffme <-
 ##############################
 # 2 - Create table
 ##############################
+# MCSE
+sum_analysis_diffme %>% 
+  select(bias_mcse) %>%
+  max()
 # Select values needed from summary object
 caption <- 
   c("Percentage bias in the estimated conditional effect of VAT on IR in case of differential measurement error")
