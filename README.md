@@ -33,10 +33,7 @@ git clone https://github.com/LindaNab/me_neo
 ```
 
 This script is tested on:
-
-
-With attached packages:
-
+platform: x86_64-apple-darwin17.0, version: R version 4.0.0 (2020-04-24)
 
 ## Project organization
 
