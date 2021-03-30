@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/242111024.svg)](https://zenodo.org/badge/latestdoi/242111024)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4648989.svg)](https://doi.org/10.5281/zenodo.4648989)
 
 # The me_neo repository
 
