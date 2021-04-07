@@ -9,10 +9,10 @@
 	[->,>=stealth', auto, node distance=2cm,main node/.style={circle,draw,font=\sffamily\Large}]
 	%\begin{scope}
 	\node (L)[font=\fontfamily{phv}\selectfont] {\textit{Z}};
-	\node (A) [font=\fontfamily{phv}\selectfont, right of = L] {\textit{VAT}};
-	\node (Y) [font=\fontfamily{phv}\selectfont, right = 1 cm of A] {\textit{Insulin Resistance}};
-	\node (As) [font=\fontfamily{phv}\selectfont, below = 0.75cm of A] {\textit{WC}};
-	\node (eps) [font=\fontfamily{phv}\selectfont, below = 0.5cm of As] {\textit{Measurement Error}};
+	\node (A) [font=\fontfamily{phv}\selectfont, right of = L] {VAT};
+	\node (Y) [font=\fontfamily{phv}\selectfont, right = 1 cm of A] {Insulin Resistance};
+	\node (As) [font=\fontfamily{phv}\selectfont, below = 0.75cm of A] {WC};
+	\node (eps) [font=\fontfamily{phv}\selectfont, below = 0.5cm of As] {Measurement Error};
 	\node (S) [font=\fontfamily{phv}\selectfont, draw, below = 0.75cm of L] {\textit{S}};
 	\path[every node/.style={font=\sffamily\small}]
 	(A) edge node [right] {} (Y)
