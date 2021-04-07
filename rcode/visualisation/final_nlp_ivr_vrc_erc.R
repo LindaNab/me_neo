@@ -30,7 +30,8 @@ make_plot_mse <- function(use_linear,
                           legend_where = "bottomleft",
                           box_legend = TRUE,
                           y_axis_tcks,
-                          y_axis_labels) {
+                          y_axis_labels,
+                          adj_x_label) {
   # get summary for the method and sampling strats (all)
   sub_summary <- select_summary(summary, 
                                 use_size_valdata = use_size_valdata, 
@@ -68,23 +69,31 @@ make_plot_mse <- function(use_linear,
     1,
     at = c(scen_range - 0.5),
     las = 2,
-    labels = c(
-      expression(paste(R ^ 2, " = 0.2, S = 0.1")),
-      expression(paste(R ^ 2, " = 0.4, S = 0.1")),
-      expression(paste(R ^ 2, " = 0.6, S = 0.1")),
-      expression(paste(R ^ 2, " = 0.8, S = 0.1")),
-      expression(paste(R ^ 2, " = 0.2, S = 1.5")),
-      expression(paste(R ^ 2, " = 0.4, S = 1.5")),
-      expression(paste(R ^ 2, " = 0.6, S = 1.5")),
-      expression(paste(R ^ 2, " = 0.8, S = 1.5")),
-      expression(paste(R ^ 2, " = 0.2, S = 3.0")),
-      expression(paste(R ^ 2, " = 0.4, S = 3.0")),
-      expression(paste(R ^ 2, " = 0.6, S = 3.0")),
-      expression(paste(R ^ 2, " = 0.8, S = 3.0"))
-    )
+    labels = FALSE
   )
   segments(0, 0, 0.5, 0)
   segments(11.5, 0, 12, 0)
+  text(x = c(scen_range - 0.5), 
+       y = par("usr")[3] - adj_x_label,
+       labels = c(
+         expression(paste(R ^ 2, " = 0.2, S = 0.1")),
+         expression(paste(R ^ 2, " = 0.4, S = 0.1")),
+         expression(paste(R ^ 2, " = 0.6, S = 0.1")),
+         expression(paste(R ^ 2, " = 0.8, S = 0.1")),
+         expression(paste(R ^ 2, " = 0.2, S = 1.5")),
+         expression(paste(R ^ 2, " = 0.4, S = 1.5")),
+         expression(paste(R ^ 2, " = 0.6, S = 1.5")),
+         expression(paste(R ^ 2, " = 0.8, S = 1.5")),
+         expression(paste(R ^ 2, " = 0.2, S = 3.0")),
+         expression(paste(R ^ 2, " = 0.4, S = 3.0")),
+         expression(paste(R ^ 2, " = 0.6, S = 3.0")),
+         expression(paste(R ^ 2, " = 0.8, S = 3.0"))
+       ), 
+       srt = 45, 
+       adj = 1)
+  mtext("Scenario parameters",
+        side = 1, 
+        line = 6.25)
   axis(
     2,
     at = y_axis_tcks,
@@ -106,7 +115,7 @@ make_plot_mse <- function(use_linear,
   text(x, y, txt)
   if (legend == TRUE) {
     legend(
-      legend = c("Random", "Str. Random", "Extremes"),
+      legend = c("Random", "Stratified Random", "Extremes"),
       legend_where,
       col = col,
       lty = lty,
@@ -132,7 +141,8 @@ make_canvas_mse <- function(use_method,
     y_axis_tcks = c(0, 0.0015, 0.003),
     y_axis_labels = c("0.0000",
                       "0.0015",
-                      "0.0030")
+                      "0.0030"),
+    adj_x_label = 0.003 * 0.06
   )
   make_plot_mse(
     use_linear = 0,
@@ -147,7 +157,8 @@ make_canvas_mse <- function(use_method,
     y_axis_tcks = c(0, 0.0015, 0.003),
     y_axis_labels = c("0.0000",
                       "0.0015",
-                      "0.0030")
+                      "0.0030"),
+    adj_x_label = 0.003 * 0.06
   )
   make_plot_mse(
     use_linear = 1,
@@ -162,7 +173,8 @@ make_canvas_mse <- function(use_method,
     y_axis_tcks = c(0, 0.0075, 0.015),
     y_axis_labels = c("0.0000",
                       "0.0075",
-                      "0.0150")
+                      "0.0150"),
+    adj_x_label = 0.015 * 0.06
   )
   make_plot_mse(
     use_linear = 0,
@@ -171,13 +183,14 @@ make_canvas_mse <- function(use_method,
     limits = c(0, 0.015),
     txt = "D)",
     asp = 12 / 0.015,
-    ifelse(legend == 1, TRUE, FALSE),
+    ifelse(legend == 4, TRUE, FALSE),
     legend_where = legend_where,
     box_legend = box_legend,
     y_axis_tcks = c(0, 0.0075, 0.015),
     y_axis_labels = c("0.0000",
                       "0.0075",
-                      "0.0150")
+                      "0.0150"),
+    adj_x_label = 0.015 * 0.06
   )
 }
 make_canvas_mse_appendix <- function(use_method,
@@ -188,31 +201,33 @@ make_canvas_mse_appendix <- function(use_method,
     use_linear = 1,
     use_method = use_method,
     use_size_valdata = 0.25,
-    limits = c(0, 0.004),
+    limits = c(0, 0.005),
     txt = "A)",
-    asp = 12 / 0.004,
+    asp = 12 / 0.005,
     legend = ifelse(legend == 1, TRUE, FALSE),
     legend_where = legend_where,
     box_legend = box_legend,
-    y_axis_tcks = c(0, 0.002, 0.004),
-    y_axis_labels = c("0.000",
-                      "0.002",
-                      "0.004")
+    y_axis_tcks = c(0, 0.0025, 0.005),
+    y_axis_labels = c("0.0000",
+                      "0.0025",
+                      "0.0050"),
+    adj_x_label = 0.005 * 0.06
   )
   make_plot_mse(
     use_linear = 0,
     use_method = use_method,
     use_size_valdata = 0.25,
-    c(0, 0.004),
+    c(0, 0.005),
     txt = "B)",
-    asp = 12 / 0.004,
+    asp = 12 / 0.005,
     legend = ifelse(legend == 2, TRUE, FALSE),
     legend_where = legend_where,
     box_legend = box_legend,
-    y_axis_tcks = c(0, 0.002, 0.004),
-    y_axis_labels = c("0.000",
-                      "0.002",
-                      "0.004")
+    y_axis_tcks = c(0, 0.0025, 0.005),
+    y_axis_labels = c("0.0000",
+                      "0.0025",
+                      "0.0050"),
+    adj_x_label = 0.005 * 0.06
   )
 }
 
@@ -220,20 +235,140 @@ make_canvas_mse_appendix <- function(use_method,
 # 2 - Internal validation restricted
 ##############################
 use_method <- "complete_case"
-pdf(paste0("./results/figures", "/mse_ivr.pdf"),
-    width = 5, height = 5, family = "Arial",
+# linear 40%
+pdf(paste0("./results/figures", "/mse_ivr_l40.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
     pointsize = 8)
-layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
 par(
-  mar = c(8, 6, 2.5, 4.5),
+  mar = c(7.5, 6, 2.5, 4),
   xpd = NA,
-  family = "Arial"
+  family = "Arial",
+  cex = 0.83
 )
-make_canvas_mse(use_method, legend = 2)
+make_plot_mse(
+  use_linear = 1,
+  use_method = use_method,
+  use_size_valdata = 0.4,
+  limits = c(0, 0.003),
+  txt = "A)",
+  asp = 12 / 0.003,
+  legend = TRUE,
+  legend_where = "bottomleft",
+  box_legend = TRUE,
+  y_axis_tcks = c(0, 0.0015, 0.003),
+  y_axis_labels = c("0.0000",
+                    "0.0015",
+                    "0.0030"),
+  adj_x_label = 0.003 * 0.06
+)
 dev.off()
+# non-linear 40%
+pdf(paste0("./results/figures", "/mse_ivr_nl40.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.4,
+  limits = c(0, 0.003),
+  txt = "B)",
+  asp = 12 / 0.003,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0015, 0.003),
+  y_axis_labels = c("0.0000",
+                    "0.0015",
+                    "0.0030"),
+  adj_x_label = 0.003 * 0.06
+)
+dev.off()
+# non-linear 40%
+pdf(paste0("./results/figures", "/mse_ivr_nl40.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.4,
+  limits = c(0, 0.003),
+  txt = "B)",
+  asp = 12 / 0.003,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0015, 0.003),
+  y_axis_labels = c("0.0000",
+                    "0.0015",
+                    "0.0030"),
+  adj_x_label = 0.003 * 0.06
+)
+dev.off()
+# linear 10%
+pdf(paste0("./results/figures", "/mse_ivr_l10.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 1,
+  use_method = use_method,
+  use_size_valdata = 0.1,
+  limits = c(0, 0.015),
+  txt = "C)",
+  asp = 12 / 0.015,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0075, 0.015),
+  y_axis_labels = c("0.0000",
+                    "0.0075",
+                    "0.0150"),
+  adj_x_label = 0.015 * 0.06
+)
+dev.off()
+# non-linear 10%
+pdf(paste0("./results/figures", "/mse_ivr_nl10.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.1,
+  limits = c(0, 0.015),
+  txt = "D)",
+  asp = 12 / 0.015,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0075, 0.015),
+  y_axis_labels = c("0.0000",
+                    "0.0075",
+                    "0.0150"),
+  adj_x_label = 0.015 * 0.06
+)
+dev.off()
+
+
+
+
 # appendix
 pdf(paste0("./results/figures", "/app_mse_ivr_25.pdf"),
-    width = 5, height = 5, family = "Arial",
+    width = 5.5, height = 5.5, family = "Arial",
     pointsize = 8)
 layout(matrix(c(1,2,0,0), 2, 2, byrow = TRUE))
 par(
@@ -241,7 +376,8 @@ par(
   xpd = NA,
   family = "Arial"
 )
-make_canvas_mse_appendix(use_method, legend = 2, legend_where = "bottomleft")
+make_canvas_mse_appendix(use_method, legend = 1, legend_where = "bottomleft", 
+                         box_legend = TRUE)
 dev.off()
 
 ##############################
@@ -249,19 +385,21 @@ dev.off()
 ##############################
 use_method <- "inadm_reg_cal"
 pdf(paste0("./results/figures", "/mse_vrc.pdf"),
-    width = 5, height = 5, family = "Arial",
+    width = 5.5, height = 5.5, family = "Arial",
     pointsize = 8)
+
+
 layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
 par(
   mar = c(8, 6, 2.5, 4.5),
   xpd = NA,
   family = "Arial"
 )
-make_canvas_mse(use_method, legend = 2)
+make_canvas_mse(use_method, legend = 1)
 dev.off()
 # appendix
 pdf(paste0("./results/figures", "/app_mse_vrc_25.pdf"),
-    width = 5, height = 5, family = "Arial",
+    width = 5.5, height = 5.5, family = "Arial",
     pointsize = 8)
 layout(matrix(c(1,2,0,0), 2, 2, byrow = TRUE))
 par(
@@ -278,7 +416,7 @@ dev.off()
 # appendix // 40% and 10% 
 use_method = "efficient_reg_cal"
 pdf(paste0("./results/figures", "/app_mse_erc_4010.pdf"),
-    width = 5, height = 5, family = "Arial",
+    width = 5.5, height = 5.5, family = "Arial",
     pointsize = 8)
 layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
 par(
@@ -290,7 +428,7 @@ make_canvas_mse(use_method, legend = 2, box_legend = TRUE)
 dev.off()
 # appendix // 25%
 pdf(paste0("./results/figures", "/app_mse_erc_25.pdf"),
-    width = 5, height = 5, family = "Arial",
+    width = 5.5, height = 5.5, family = "Arial",
     pointsize = 8)
 layout(matrix(c(1,2,0,0), 2, 2, byrow = TRUE))
 par(

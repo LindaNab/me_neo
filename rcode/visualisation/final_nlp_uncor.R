@@ -57,24 +57,32 @@ make_plot_percbias_uncor <- function(asp) {
     1,
     at = c(scen_range - 0.5),
     las = 2,
-    labels = c(
-      expression(paste(R ^ 2, " = 0.2, S = 0.1")),
-      expression(paste(R ^ 2, " = 0.4, S = 0.1")),
-      expression(paste(R ^ 2, " = 0.6, S = 0.1")),
-      expression(paste(R ^ 2, " = 0.8, S = 0.1")),
-      expression(paste(R ^ 2, " = 0.2, S = 1.5")),
-      expression(paste(R ^ 2, " = 0.4, S = 1.5")),
-      expression(paste(R ^ 2, " = 0.6, S = 1.5")),
-      expression(paste(R ^ 2, " = 0.8, S = 1.5")),
-      expression(paste(R ^ 2, " = 0.2, S = 3.0")),
-      expression(paste(R ^ 2, " = 0.4, S = 3.0")),
-      expression(paste(R ^ 2, " = 0.6, S = 3.0")),
-      expression(paste(R ^ 2, " = 0.8, S = 3.0"))
-    ),
+    labels = FALSE,
     asp = asp
   )
   segments(0,-100, 0.5,-100)
   segments(11.5,-100, 12,-100)
+  text(x = c(scen_range - 0.5), 
+       y = par("usr")[3] - 6,
+       labels = c(
+         expression(paste(R ^ 2, " = 0.2, S = 0.1")),
+         expression(paste(R ^ 2, " = 0.4, S = 0.1")),
+         expression(paste(R ^ 2, " = 0.6, S = 0.1")),
+         expression(paste(R ^ 2, " = 0.8, S = 0.1")),
+         expression(paste(R ^ 2, " = 0.2, S = 1.5")),
+         expression(paste(R ^ 2, " = 0.4, S = 1.5")),
+         expression(paste(R ^ 2, " = 0.6, S = 1.5")),
+         expression(paste(R ^ 2, " = 0.8, S = 1.5")),
+         expression(paste(R ^ 2, " = 0.2, S = 3.0")),
+         expression(paste(R ^ 2, " = 0.4, S = 3.0")),
+         expression(paste(R ^ 2, " = 0.6, S = 3.0")),
+         expression(paste(R ^ 2, " = 0.8, S = 3.0"))
+       ), 
+       srt = 45, 
+       adj = 1)
+  mtext("Scenario parameters",
+        side = 1, 
+        line = 6.25)
   axis(
     2,
     at = c(-100,-75,-50,-25, 0),
@@ -96,13 +104,15 @@ make_plot_percbias_uncor <- function(asp) {
 # 2 - Save plot ----
 ##############################
 pdf(paste0("./results/figures", "/percbias_uncor.pdf"),
-    width = 5, height = 5, family = "Arial",
+    width = 2.8, height = 2.8, family = "Arial",
     pointsize = 8)
-layout(matrix(c(1,0,0,0), 2, 2, byrow = TRUE))
+#layout(matrix(c(1,0,0,0), 2, 2, byrow = TRUE))
 par(
-  mar = c(8, 6, 2.5, 4.5),
+  mar = c(7.5, 6, 2.5, 4),
   xpd = NA,
-  family = "Arial"
+  family = "Arial",
+  cex = 0.83
 )
 make_plot_percbias_uncor(asp = 12/100)
 dev.off()
+
