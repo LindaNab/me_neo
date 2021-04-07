@@ -363,51 +363,244 @@ make_plot_mse(
 )
 dev.off()
 
-
-
-
 # appendix
-pdf(paste0("./results/figures", "/app_mse_ivr_25.pdf"),
-    width = 5.5, height = 5.5, family = "Arial",
+# linear 25%
+pdf(paste0("./results/figures", "/mse_ivr_l25.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
     pointsize = 8)
-layout(matrix(c(1,2,0,0), 2, 2, byrow = TRUE))
 par(
-  mar = c(8, 6, 2.5, 4.5),
+  mar = c(7.5, 6, 2.5, 4),
   xpd = NA,
-  family = "Arial"
+  family = "Arial",
+  cex = 0.83
 )
-make_canvas_mse_appendix(use_method, legend = 1, legend_where = "bottomleft", 
-                         box_legend = TRUE)
+make_plot_mse(
+  use_linear = 1,
+  use_method = use_method,
+  use_size_valdata = 0.25,
+  limits = c(0, 0.005),
+  txt = "A)",
+  asp = 12 / 0.005,
+  legend = TRUE,
+  legend_where = "bottomleft",
+  box_legend = TRUE,
+  y_axis_tcks = c(0, 0.0025, 0.005),
+  y_axis_labels = c("0.0000",
+                    "0.0025",
+                    "0.0050"),
+  adj_x_label = 0.005 * 0.06
+)
+dev.off()
+# non-linear 25%
+pdf(paste0("./results/figures", "/mse_ivr_nl25.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.25,
+  limits = c(0, 0.005),
+  txt = "B)",
+  asp = 12 / 0.005,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0025, 0.005),
+  y_axis_labels = c("0.0000",
+                    "0.0025",
+                    "0.0050"),
+  adj_x_label = 0.005 * 0.06
+)
 dev.off()
 
 ##############################
 # 3 - Validation regression calibration ----
 ##############################
 use_method <- "inadm_reg_cal"
-pdf(paste0("./results/figures", "/mse_vrc.pdf"),
-    width = 5.5, height = 5.5, family = "Arial",
+# linear 40%
+pdf(paste0("./results/figures", "/mse_vrc_l40.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
     pointsize = 8)
-
-
-layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
 par(
-  mar = c(8, 6, 2.5, 4.5),
+  mar = c(7.5, 6, 2.5, 4),
   xpd = NA,
-  family = "Arial"
+  family = "Arial",
+  cex = 0.83
 )
-make_canvas_mse(use_method, legend = 1)
+make_plot_mse(
+  use_linear = 1,
+  use_method = use_method,
+  use_size_valdata = 0.4,
+  limits = c(0, 0.003),
+  txt = "A)",
+  asp = 12 / 0.003,
+  legend = TRUE,
+  legend_where = "bottomleft",
+  box_legend = TRUE,
+  y_axis_tcks = c(0, 0.0015, 0.003),
+  y_axis_labels = c("0.0000",
+                    "0.0015",
+                    "0.0030"),
+  adj_x_label = 0.003 * 0.06
+)
 dev.off()
-# appendix
-pdf(paste0("./results/figures", "/app_mse_vrc_25.pdf"),
-    width = 5.5, height = 5.5, family = "Arial",
+# non-linear 40%
+pdf(paste0("./results/figures", "/mse_vrc_nl40.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
     pointsize = 8)
-layout(matrix(c(1,2,0,0), 2, 2, byrow = TRUE))
 par(
-  mar = c(8, 6, 2.5, 4.5),
+  mar = c(7.5, 6, 2.5, 4),
   xpd = NA,
-  family = "Arial"
+  family = "Arial",
+  cex = 0.83
 )
-make_canvas_mse_appendix(use_method, legend = 2, legend_where = "bottomleft")
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.4,
+  limits = c(0, 0.003),
+  txt = "B)",
+  asp = 12 / 0.003,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0015, 0.003),
+  y_axis_labels = c("0.0000",
+                    "0.0015",
+                    "0.0030"),
+  adj_x_label = 0.003 * 0.06
+)
+dev.off()
+# non-linear 40%
+pdf(paste0("./results/figures", "/mse_vrc_nl40.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.4,
+  limits = c(0, 0.003),
+  txt = "B)",
+  asp = 12 / 0.003,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0015, 0.003),
+  y_axis_labels = c("0.0000",
+                    "0.0015",
+                    "0.0030"),
+  adj_x_label = 0.003 * 0.06
+)
+dev.off()
+# linear 10%
+pdf(paste0("./results/figures", "/mse_vrc_l10.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 1,
+  use_method = use_method,
+  use_size_valdata = 0.1,
+  limits = c(0, 0.015),
+  txt = "C)",
+  asp = 12 / 0.015,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0075, 0.015),
+  y_axis_labels = c("0.0000",
+                    "0.0075",
+                    "0.0150"),
+  adj_x_label = 0.015 * 0.06
+)
+dev.off()
+# non-linear 10%
+pdf(paste0("./results/figures", "/mse_vrc_nl10.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.1,
+  limits = c(0, 0.015),
+  txt = "D)",
+  asp = 12 / 0.015,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0075, 0.015),
+  y_axis_labels = c("0.0000",
+                    "0.0075",
+                    "0.0150"),
+  adj_x_label = 0.015 * 0.06
+)
+dev.off()
+
+# appendix
+# linear 25%
+pdf(paste0("./results/figures", "/mse_vrc_l25.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 1,
+  use_method = use_method,
+  use_size_valdata = 0.25,
+  limits = c(0, 0.005),
+  txt = "A)",
+  asp = 12 / 0.005,
+  legend = TRUE,
+  legend_where = "topleft",
+  box_legend = FALSE,
+  y_axis_tcks = c(0, 0.0025, 0.005),
+  y_axis_labels = c("0.0000",
+                    "0.0025",
+                    "0.0050"),
+  adj_x_label = 0.005 * 0.06
+)
+dev.off()
+# non-linear 25%
+pdf(paste0("./results/figures", "/mse_vrc_nl25.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.25,
+  limits = c(0, 0.005),
+  txt = "B)",
+  asp = 12 / 0.005,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0025, 0.005),
+  y_axis_labels = c("0.0000",
+                    "0.0025",
+                    "0.0050"),
+  adj_x_label = 0.005 * 0.06
+)
 dev.off()
 
 ##############################
@@ -415,26 +608,184 @@ dev.off()
 ##############################
 # appendix // 40% and 10% 
 use_method = "efficient_reg_cal"
-pdf(paste0("./results/figures", "/app_mse_erc_4010.pdf"),
-    width = 5.5, height = 5.5, family = "Arial",
+# linear 40%
+pdf(paste0("./results/figures", "/mse_erc_l40.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
     pointsize = 8)
-layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
 par(
-  mar = c(8, 6, 2.5, 4.5),
+  mar = c(7.5, 6, 2.5, 4),
   xpd = NA,
-  family = "Arial"
+  family = "Arial",
+  cex = 0.83
 )
-make_canvas_mse(use_method, legend = 2, box_legend = TRUE)
+make_plot_mse(
+  use_linear = 1,
+  use_method = use_method,
+  use_size_valdata = 0.4,
+  limits = c(0, 0.003),
+  txt = "A)",
+  asp = 12 / 0.003,
+  legend = TRUE,
+  legend_where = "bottomleft",
+  box_legend = TRUE,
+  y_axis_tcks = c(0, 0.0015, 0.003),
+  y_axis_labels = c("0.0000",
+                    "0.0015",
+                    "0.0030"),
+  adj_x_label = 0.003 * 0.06
+)
 dev.off()
-# appendix // 25%
-pdf(paste0("./results/figures", "/app_mse_erc_25.pdf"),
-    width = 5.5, height = 5.5, family = "Arial",
+# non-linear 40%
+pdf(paste0("./results/figures", "/mse_erc_nl40.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
     pointsize = 8)
-layout(matrix(c(1,2,0,0), 2, 2, byrow = TRUE))
 par(
-  mar = c(8, 6, 2.5, 4.5),
+  mar = c(7.5, 6, 2.5, 4),
   xpd = NA,
-  family = "Arial"
+  family = "Arial",
+  cex = 0.83
 )
-make_canvas_mse_appendix(use_method, legend = 2, legend_where = "bottomleft")
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.4,
+  limits = c(0, 0.003),
+  txt = "B)",
+  asp = 12 / 0.003,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0015, 0.003),
+  y_axis_labels = c("0.0000",
+                    "0.0015",
+                    "0.0030"),
+  adj_x_label = 0.003 * 0.06
+)
+dev.off()
+# non-linear 40%
+pdf(paste0("./results/figures", "/mse_erc_nl40.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.4,
+  limits = c(0, 0.003),
+  txt = "B)",
+  asp = 12 / 0.003,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0015, 0.003),
+  y_axis_labels = c("0.0000",
+                    "0.0015",
+                    "0.0030"),
+  adj_x_label = 0.003 * 0.06
+)
+dev.off()
+# linear 10%
+pdf(paste0("./results/figures", "/mse_erc_l10.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 1,
+  use_method = use_method,
+  use_size_valdata = 0.1,
+  limits = c(0, 0.015),
+  txt = "C)",
+  asp = 12 / 0.015,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0075, 0.015),
+  y_axis_labels = c("0.0000",
+                    "0.0075",
+                    "0.0150"),
+  adj_x_label = 0.015 * 0.06
+)
+dev.off()
+# non-linear 10%
+pdf(paste0("./results/figures", "/mse_erc_nl10.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.1,
+  limits = c(0, 0.015),
+  txt = "D)",
+  asp = 12 / 0.015,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0075, 0.015),
+  y_axis_labels = c("0.0000",
+                    "0.0075",
+                    "0.0150"),
+  adj_x_label = 0.015 * 0.06
+)
+dev.off()
+
+# appendix
+# linear 25%
+pdf(paste0("./results/figures", "/mse_erc_l25.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 1,
+  use_method = use_method,
+  use_size_valdata = 0.25,
+  limits = c(0, 0.005),
+  txt = "A)",
+  asp = 12 / 0.005,
+  legend = TRUE,
+  legend_where = "topleft",
+  box_legend = FALSE,
+  y_axis_tcks = c(0, 0.0025, 0.005),
+  y_axis_labels = c("0.0000",
+                    "0.0025",
+                    "0.0050"),
+  adj_x_label = 0.005 * 0.06
+)
+dev.off()
+# non-linear 25%
+pdf(paste0("./results/figures", "/mse_erc_nl25.pdf"),
+    width = 2.8, height = 2.8, family = "Arial",
+    pointsize = 8)
+par(
+  mar = c(7.5, 6, 2.5, 4),
+  xpd = NA,
+  family = "Arial",
+  cex = 0.83
+)
+make_plot_mse(
+  use_linear = 0,
+  use_method = use_method,
+  use_size_valdata = 0.25,
+  limits = c(0, 0.005),
+  txt = "B)",
+  asp = 12 / 0.005,
+  legend = FALSE,
+  y_axis_tcks = c(0, 0.0025, 0.005),
+  y_axis_labels = c("0.0000",
+                    "0.0025",
+                    "0.0050"),
+  adj_x_label = 0.005 * 0.06
+)
 dev.off()
