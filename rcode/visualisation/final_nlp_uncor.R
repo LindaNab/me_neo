@@ -80,7 +80,7 @@ make_plot_percbias_uncor <- function(asp) {
        ), 
        srt = 45, 
        adj = 1)
-  mtext("Scenario parameters",
+  mtext("Scenario Parameters",
         side = 1, 
         line = 6.25)
   axis(

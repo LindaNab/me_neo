@@ -91,7 +91,7 @@ make_plot_mse <- function(use_linear,
        ), 
        srt = 45, 
        adj = 1)
-  mtext("Scenario parameters",
+  mtext("Scenario Parameters",
         side = 1, 
         line = 6.25)
   axis(
@@ -113,122 +113,38 @@ make_plot_mse <- function(use_linear,
   x <- x[1] + strwidth(txt)
   y <- y[2] - strheight(txt) * 1.5
   text(x, y, txt)
-  if (legend == TRUE) {
+  if (legend == TRUE & legend_where == "bottomleft") {
+    legend <-
     legend(
       legend = c("Random", "Stratified Random", "Extremes"),
       legend_where,
       col = col,
       lty = lty,
       bty = ifelse(box_legend == TRUE, "o", "n"),
+      title = expression(underline(Sampling ~ Strategy)),
+      plot = FALSE
+    )
+    new_x <- legend$rect$left + legend$rect$h * asp * 0.1
+    new_y <- legend$rect$top + legend$rect$h * 0.1
+    legend(
+      x = new_x, y = new_y,
+      legend = c("Random", "Stratified Random", "Extremes"),
+      col = col,
+      lty = lty,
+      bty = ifelse(box_legend == TRUE, "o", "n"),
       title = expression(underline(Sampling ~ Strategy))
     )
+  } else if (legend == TRUE){
+      legend(
+        legend = c("Random", "Stratified Random", "Extremes"),
+        legend_where,
+        col = col,
+        lty = lty,
+        bty = ifelse(box_legend == TRUE, "o", "n"),
+        title = expression(underline(Sampling ~ Strategy)),
+        plot = TRUE
+      )
   }
-}
-make_canvas_mse <- function(use_method, 
-                            legend,
-                            legend_where = "bottomleft",
-                            box_legend = TRUE) {
-  make_plot_mse(
-    use_linear = 1,
-    use_method = use_method,
-    use_size_valdata = 0.4,
-    limits = c(0, 0.003),
-    txt = "A)",
-    asp = 12 / 0.003,
-    legend = ifelse(legend == 1, TRUE, FALSE),
-    legend_where = legend_where,
-    box_legend = box_legend,
-    y_axis_tcks = c(0, 0.0015, 0.003),
-    y_axis_labels = c("0.0000",
-                      "0.0015",
-                      "0.0030"),
-    adj_x_label = 0.003 * 0.06
-  )
-  make_plot_mse(
-    use_linear = 0,
-    use_method = use_method,
-    use_size_valdata = 0.4,
-    c(0, 0.003),
-    txt = "B)",
-    asp = 12 / 0.003,
-    ifelse(legend == 2, TRUE, FALSE),
-    legend_where = legend_where,
-    box_legend = box_legend,
-    y_axis_tcks = c(0, 0.0015, 0.003),
-    y_axis_labels = c("0.0000",
-                      "0.0015",
-                      "0.0030"),
-    adj_x_label = 0.003 * 0.06
-  )
-  make_plot_mse(
-    use_linear = 1,
-    use_method = use_method,
-    use_size_valdata = 0.1,
-    limits = c(0, 0.015),
-    txt = "C)",
-    asp = 12 / 0.015,
-    ifelse(legend == 3, TRUE, FALSE),
-    legend_where = legend_where,
-    box_legend = box_legend,
-    y_axis_tcks = c(0, 0.0075, 0.015),
-    y_axis_labels = c("0.0000",
-                      "0.0075",
-                      "0.0150"),
-    adj_x_label = 0.015 * 0.06
-  )
-  make_plot_mse(
-    use_linear = 0,
-    use_method = use_method,
-    use_size_valdata = 0.1,
-    limits = c(0, 0.015),
-    txt = "D)",
-    asp = 12 / 0.015,
-    ifelse(legend == 4, TRUE, FALSE),
-    legend_where = legend_where,
-    box_legend = box_legend,
-    y_axis_tcks = c(0, 0.0075, 0.015),
-    y_axis_labels = c("0.0000",
-                      "0.0075",
-                      "0.0150"),
-    adj_x_label = 0.015 * 0.06
-  )
-}
-make_canvas_mse_appendix <- function(use_method,
-                                     legend,
-                                     legend_where = "bottomleft",
-                                     box_legend = FALSE) {
-  make_plot_mse(
-    use_linear = 1,
-    use_method = use_method,
-    use_size_valdata = 0.25,
-    limits = c(0, 0.005),
-    txt = "A)",
-    asp = 12 / 0.005,
-    legend = ifelse(legend == 1, TRUE, FALSE),
-    legend_where = legend_where,
-    box_legend = box_legend,
-    y_axis_tcks = c(0, 0.0025, 0.005),
-    y_axis_labels = c("0.0000",
-                      "0.0025",
-                      "0.0050"),
-    adj_x_label = 0.005 * 0.06
-  )
-  make_plot_mse(
-    use_linear = 0,
-    use_method = use_method,
-    use_size_valdata = 0.25,
-    c(0, 0.005),
-    txt = "B)",
-    asp = 12 / 0.005,
-    legend = ifelse(legend == 2, TRUE, FALSE),
-    legend_where = legend_where,
-    box_legend = box_legend,
-    y_axis_tcks = c(0, 0.0025, 0.005),
-    y_axis_labels = c("0.0000",
-                      "0.0025",
-                      "0.0050"),
-    adj_x_label = 0.005 * 0.06
-  )
 }
 
 ##############################
